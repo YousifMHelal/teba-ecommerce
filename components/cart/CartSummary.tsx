@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ShieldCheck, Truck } from "lucide-react";
 
 import { useCart } from "@/hooks/useCart";
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { SHIPPING_COST, SHIPPING_THRESHOLD } from "@/lib/constants";
 
 export default function CartSummary({
@@ -54,9 +54,11 @@ export default function CartSummary({
       </div>
 
       {showCheckoutButton && (
-        <Button className="w-full" size="lg" asChild>
-          <Link href="/checkout">إتمام الطلب</Link>
-        </Button>
+        <Link
+          href="/checkout"
+          className={cn(buttonVariants({ size: "lg" }), "w-full")}>
+          إتمام الطلب
+        </Link>
       )}
 
       <div className="space-y-2 pt-1">

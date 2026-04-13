@@ -71,10 +71,18 @@ export const authConfig: NextAuthConfig = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id
-        token.role = user.role
+        token.role = user.role === "ADMIN" ? "ADMIN" : "USER"
+        token.name = user.name
+        token.email = user.email
+        token.picture = user.image
+      }
+
+      // Keep JWT in sync with `useSession().update(...)` from the client.
+      if (trigger === "update" && session) {
+        if (typeof session.name === "string") token.name = session.name
       }
 
       return token
@@ -84,9 +92,17 @@ export const authConfig: NextAuthConfig = {
         if (typeof token.id === "string") {
           session.user.id = token.id
         }
-
-        if (token.role === "USER" || token.role === "ADMIN") {
+        if (token.role === "ADMIN" || token.role === "USER") {
           session.user.role = token.role
+        }
+        if (typeof token.name === "string") {
+          session.user.name = token.name
+        }
+        if (typeof token.email === "string") {
+          session.user.email = token.email
+        }
+        if (typeof token.picture === "string") {
+          session.user.image = token.picture
         }
       }
 

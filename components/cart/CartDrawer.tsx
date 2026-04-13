@@ -11,9 +11,9 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { formatPrice } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 
 import CartItem from "./CartItem";
 
@@ -70,12 +70,15 @@ export default function CartDrawer() {
               <p className="mb-6 text-sm text-muted-foreground">
                 أضف منتجات لتظهر هنا
               </p>
-              <Button
-                variant="outline"
+              <Link
+                href="/shop"
                 onClick={() => setCartOpen(false)}
-                asChild>
-                <Link href="/shop">تصفح المتجر</Link>
-              </Button>
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "inline-flex",
+                )}>
+                تصفح المتجر
+              </Link>
             </div>
           ) : (
             <div className="divide-y">
@@ -104,15 +107,21 @@ export default function CartDrawer() {
               <span>{formatPrice(totalPrice)}</span>
             </div>
             <div className="grid grid-cols-2 gap-2 pt-1">
-              <Button
-                variant="outline"
+              <Link
+                href="/cart"
                 onClick={() => setCartOpen(false)}
-                asChild>
-                <Link href="/cart">عرض السلة</Link>
-              </Button>
-              <Button onClick={() => setCartOpen(false)} asChild>
-                <Link href="/checkout">إتمام الطلب</Link>
-              </Button>
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "inline-flex",
+                )}>
+                عرض السلة
+              </Link>
+              <Link
+                href="/checkout"
+                onClick={() => setCartOpen(false)}
+                className={cn(buttonVariants(), "inline-flex")}>
+                إتمام الطلب
+              </Link>
             </div>
           </div>
         )}

@@ -1,25 +1,26 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { redirect } from "next/navigation";
 
-export default function ProfilePage() {
+import ProfileForm from "./_components/ProfileForm";
+import PasswordForm from "./_components/PasswordForm";
+import { auth } from "@/lib/auth";
+
+export const metadata = { title: "الملف الشخصي" };
+
+export default async function ProfilePage() {
+  const session = await auth();
+  if (!session?.user) redirect("/login");
+
   return (
-    <Card className="border-black/5 bg-white/90">
-      <CardContent className="space-y-4 p-6">
-        <h1 className="text-3xl font-semibold text-zinc-950">Profile</h1>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="profile-name">Name</Label>
-            <Input id="profile-name" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="profile-email">Email</Label>
-            <Input id="profile-email" type="email" />
-          </div>
-        </div>
-        <Button>Save changes</Button>
-      </CardContent>
-    </Card>
-  )
+    <div className="space-y-6 max-w-xl">
+      <div>
+        <h1 className="text-xl font-bold">الملف الشخصي</h1>
+        <p className="text-muted-foreground text-sm mt-1">
+          إدارة معلومات حسابك الشخصي
+        </p>
+      </div>
+
+      <ProfileForm user={session.user} />
+      <PasswordForm />
+    </div>
+  );
 }

@@ -1,12 +1,26 @@
-import type { ReactNode } from "react"
+import { redirect } from "next/navigation";
 
-import { AccountSidebar } from "@/components/layout/AccountSidebar"
+import AccountSidebar from "@/components/layout/AccountSidebar";
+import { auth } from "@/lib/auth";
 
-export default function AccountLayout({ children }: { children: ReactNode }) {
+export default async function AccountLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await auth();
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   return (
-    <div className="mx-auto grid min-h-screen w-full max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-8">
-      <AccountSidebar />
-      <div>{children}</div>
+    <div className="container mx-auto px-4 py-8 flex-1">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <aside className="md:col-span-1">
+          <AccountSidebar user={session.user} />
+        </aside>
+        <main className="md:col-span-3">{children}</main>
+      </div>
     </div>
-  )
+  );
 }

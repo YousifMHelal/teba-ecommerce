@@ -6,9 +6,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-export async function uploadImage(file: string): Promise<string> {
+export async function uploadImage(
+  file: string,
+  folder = "teba/products"
+): Promise<string> {
   const result = await cloudinary.uploader.upload(file, {
-    folder: "teba/products",
+    folder,
     transformation: [
       { width: 800, height: 800, crop: "limit" },
       { quality: "auto", fetch_format: "auto" },

@@ -10,6 +10,7 @@ import { SHIPPING_THRESHOLD, SHIPPING_COST } from "@/lib/constants";
 export default function OrderSummary() {
   const { items, totalPrice } = useCart();
   const [mounted, setMounted] = useState(false);
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     setMounted(true);
@@ -49,35 +50,48 @@ export default function OrderSummary() {
 
       {/* Items */}
       <div className="space-y-3 max-h-64 overflow-y-auto">
-        {items.map((item) => (
-          <div
-            key={`${item.id}-${item.variantId}`}
-            className="flex gap-3 items-start">
-            <div className="relative h-14 w-14 shrink-0 rounded-lg overflow-hidden bg-muted">
-              <Image
-                src={item.image || "/assets/placeholder.png"}
-                alt={item.name}
-                fill
-                className="object-cover"
-                sizes="56px"
-              />
-              <span className="absolute -top-1 -inset-e-1 h-4 w-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
-                {item.quantity}
-              </span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium line-clamp-1">{item.name}</p>
-              {item.variantLabel && (
-                <p className="text-xs text-muted-foreground">
-                  {item.variantLabel}
+        {items.map((item) => {
+          const imageKey = `${item.id}-${item.variantId ?? "default"}`;
+          const hasImage =
+            typeof item.image === "string" &&
+            item.image.trim().length > 0 &&
+            !failedImages[imageKey];
+
+          return (
+            <div
+              key={`${item.id}-${item.variantId}`}
+              className="flex gap-3 items-start">
+              <div className="relative h-14 w-14 shrink-0 rounded-lg overflow-hidden bg-muted">
+                <Image
+                  src={
+                    hasImage ? item.image!.trim() : "/assets/placeholder.png"
+                  }
+                  alt="صورة المنتج"
+                  fill
+                  className="object-cover"
+                  sizes="56px"
+                  onError={() =>
+                    setFailedImages((prev) => ({ ...prev, [imageKey]: true }))
+                  }
+                />
+                <span className="absolute -top-1 -inset-e-1 h-4 w-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+                  {item.quantity}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium line-clamp-1">{item.name}</p>
+                {item.variantLabel && (
+                  <p className="text-xs text-muted-foreground">
+                    {item.variantLabel}
+                  </p>
+                )}
+                <p className="text-sm font-bold mt-0.5">
+                  {formatPrice(item.price * item.quantity)}
                 </p>
-              )}
-              <p className="text-sm font-bold mt-0.5">
-                {formatPrice(item.price * item.quantity)}
-              </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <Separator />

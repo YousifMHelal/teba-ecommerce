@@ -7,7 +7,8 @@ import ProductGrid from "@/components/product/ProductGrid";
 import ProductFilters from "@/components/product/ProductFilters";
 import Pagination from "@/components/shared/Pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type PageProps = {
   searchParams: Promise<{
@@ -69,9 +70,14 @@ export default async function ShopPage({ searchParams }: PageProps) {
           <p className="mt-1 text-sm text-muted-foreground">
             جرّب تغيير الفئة أو الترتيب أو البحث بكلمة مختلفة.
           </p>
-          <Button asChild variant="outline" className="mt-5">
-            <Link href="/shop">عرض كل المنتجات</Link>
-          </Button>
+          <Link
+            href="/shop"
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "mt-5 inline-flex",
+            )}>
+            عرض كل المنتجات
+          </Link>
         </div>
       )}
     </div>

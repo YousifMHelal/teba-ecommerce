@@ -23,6 +23,11 @@ export const registerSchema = z
     path: ["confirmPassword"],
   })
 
+export const profileSchema = z.object({
+  name: z.string().min(2, "الاسم يجب أن يكون حرفين على الأقل"),
+  image: z.string().trim().url("رابط الصورة غير صالح").optional().or(z.literal("")),
+})
+
 export const addressSchema = z.object({
   fullName: z.string().min(1, "الاسم الكامل مطلوب"),
   phone: z
@@ -70,5 +75,6 @@ export const checkoutSchema = z
 
 export type LoginInput = z.infer<typeof loginSchema>
 export type RegisterInput = z.infer<typeof registerSchema>
+export type ProfileInput = z.infer<typeof profileSchema>
 export type AddressInput = z.infer<typeof addressSchema>
 export type CheckoutInput = z.infer<typeof checkoutSchema>

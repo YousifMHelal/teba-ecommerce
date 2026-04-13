@@ -1,5 +1,5 @@
-export const APP_NAME = "تبعة"
-export const APP_DESCRIPTION = "متجر تبعة الإلكتروني — تسوق بسهولة وأمان"
+export const APP_NAME = "طيبة"
+export const APP_DESCRIPTION = "متجر طيبة الإلكتروني — تسوق بسهولة وأمان"
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL!
 
 export const ITEMS_PER_PAGE = 12
@@ -44,7 +44,7 @@ export const ORDER_STATUS = {
 } as const
 
 export const PAYMENT_STATUS = {
-  UNPAID: "غير مدفوع",
+  UNPAID: "منتظر التأكيد",
   PAID: "مدفوع",
   REFUNDED: "مسترجع",
 } as const

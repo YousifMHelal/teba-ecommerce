@@ -13,7 +13,7 @@ export default function Providers({ children }: ProvidersProps) {
   return (
     <SessionProvider>
       {children}
-      <Toaster richColors closeButton />
+      <Toaster richColors closeButton position="top-left" />
     </SessionProvider>
   );
 }

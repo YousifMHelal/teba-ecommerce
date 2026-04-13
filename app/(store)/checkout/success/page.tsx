@@ -1,19 +1,19 @@
 import Link from "next/link"
 import { CheckCircle2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { getOrderById } from "@/lib/actions/order.actions"
-import { formatPrice } from "@/lib/utils"
-import { ORDER_STATUS, PAYMENT_METHOD_LABELS } from "@/lib/constants"
+import { buttonVariants } from "@/components/ui/button";
+import { getOrderById } from "@/lib/actions/order.actions";
+import { cn, formatPrice } from "@/lib/utils";
+import { ORDER_STATUS, PAYMENT_METHOD_LABELS } from "@/lib/constants";
 
 type PageProps = {
-  searchParams: Promise<{ orderId?: string }>
-}
+  searchParams: Promise<{ orderId?: string }>;
+};
 
-export const metadata = { title: "تم تأكيد طلبك" }
+export const metadata = { title: "تم تأكيد طلبك" };
 
 export default async function OrderSuccessPage({ searchParams }: PageProps) {
-  const { orderId } = await searchParams
-  const order = orderId ? await getOrderById(orderId) : null
+  const { orderId } = await searchParams;
+  const order = orderId ? await getOrderById(orderId) : null;
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-xl text-center">
@@ -38,14 +38,18 @@ export default async function OrderSuccessPage({ searchParams }: PageProps) {
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div>
               <p className="text-muted-foreground text-xs mb-0.5">رقم الطلب</p>
-              <p className="font-mono font-medium text-xs">{order.id.slice(-8).toUpperCase()}</p>
+              <p className="font-mono font-medium text-xs">
+                {order.id.slice(-8).toUpperCase()}
+              </p>
             </div>
             <div>
               <p className="text-muted-foreground text-xs mb-0.5">الحالة</p>
               <p className="font-medium">{ORDER_STATUS[order.status]}</p>
             </div>
             <div>
-              <p className="text-muted-foreground text-xs mb-0.5">طريقة الدفع</p>
+              <p className="text-muted-foreground text-xs mb-0.5">
+                طريقة الدفع
+              </p>
               <p className="font-medium">
                 {PAYMENT_METHOD_LABELS[order.paymentMethod]}
               </p>
@@ -68,13 +72,17 @@ export default async function OrderSuccessPage({ searchParams }: PageProps) {
       )}
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Button asChild>
-          <Link href="/account/orders">متابعة طلباتي</Link>
-        </Button>
-        <Button variant="outline" asChild>
-          <Link href="/shop">مواصلة التسوق</Link>
-        </Button>
+        <Link
+          href="/account/orders"
+          className={cn(buttonVariants(), "inline-flex")}>
+          متابعة طلباتي
+        </Link>
+        <Link
+          href="/shop"
+          className={cn(buttonVariants({ variant: "outline" }), "inline-flex")}>
+          مواصلة التسوق
+        </Link>
       </div>
     </div>
-  )
+  );
 }

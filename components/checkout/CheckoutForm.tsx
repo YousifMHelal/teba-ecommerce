@@ -44,7 +44,21 @@ const EGYPT_GOVERNORATES = [
   "سوهاج",
 ];
 
-export default function CheckoutForm() {
+type CheckoutFormProps = {
+  initialAddress?: {
+    fullName?: string;
+    phone?: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    postalCode?: string;
+  } | null;
+};
+
+export default function CheckoutForm({
+  initialAddress = null,
+}: CheckoutFormProps) {
   const router = useRouter();
   const { items, clearCart } = useCart();
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +73,13 @@ export default function CheckoutForm() {
   } = useForm<CheckoutInput>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
-      country: "مصر",
+      fullName: initialAddress?.fullName ?? "",
+      phone: initialAddress?.phone ?? "",
+      street: initialAddress?.street ?? "",
+      city: initialAddress?.city ?? "",
+      state: initialAddress?.state ?? "",
+      country: initialAddress?.country ?? "مصر",
+      postalCode: initialAddress?.postalCode ?? "",
       paymentMethod: "PAY_ON_DELIVERY",
     },
   });

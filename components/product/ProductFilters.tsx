@@ -91,7 +91,7 @@ export default function ProductFilters({
         <Label className="text-sm whitespace-nowrap">الفئة</Label>
         <Select
           value={currentCategory}
-          onValueChange={(v) => updateFilter("category", v)}>
+          onValueChange={(v) => updateFilter("category", v ?? "all")}>
           <SelectTrigger className="w-36 h-9">
             <SelectValue>{currentCategoryLabel}</SelectValue>
           </SelectTrigger>
@@ -110,7 +110,7 @@ export default function ProductFilters({
         <Label className="text-sm whitespace-nowrap">الترتيب</Label>
         <Select
           value={currentSort}
-          onValueChange={(v) => updateFilter("sort", v)}>
+          onValueChange={(v) => updateFilter("sort", v ?? "createdAt_desc")}>
           <SelectTrigger className="w-44 h-9">
             <SelectValue>{currentSortLabel}</SelectValue>
           </SelectTrigger>

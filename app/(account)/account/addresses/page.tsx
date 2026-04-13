@@ -1,16 +1,21 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { getMyAddresses } from "@/lib/actions/user.actions";
 
-export default function AddressesPage() {
+import AddressesClient from "./_components/AddressesClient";
+
+export const metadata = { title: "عناويني" };
+
+export default async function AddressesPage() {
+  const addresses = await getMyAddresses();
+
   return (
     <div className="space-y-4">
-      <Card className="border-black/5 bg-white/90">
-        <CardContent className="space-y-2 p-6">
-          <h1 className="text-3xl font-semibold text-zinc-950">Addresses</h1>
-          <p className="text-zinc-600">Manage default shipping and billing addresses.</p>
-        </CardContent>
-      </Card>
-      <Button>Add address</Button>
+      <div>
+        <h1 className="text-xl font-bold">عناويني</h1>
+        <p className="text-muted-foreground text-sm mt-1">
+          إدارة عناوين التوصيل المحفوظة
+        </p>
+      </div>
+      <AddressesClient initialAddresses={addresses} />
     </div>
-  )
+  );
 }

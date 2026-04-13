@@ -6,7 +6,8 @@ import { ShoppingBag, Trash2 } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import CartItem from "@/components/cart/CartItem";
 import CartSummary from "@/components/cart/CartSummary";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function CartPage() {
   const { items, clearCart } = useCart();
@@ -19,9 +20,11 @@ export default function CartPage() {
         <p className="mb-8 text-muted-foreground">
           لم تضف أي منتجات إلى سلة التسوق بعد
         </p>
-        <Button size="lg" asChild>
-          <Link href="/shop">ابدأ التسوق</Link>
-        </Button>
+        <Link
+          href="/shop"
+          className={cn(buttonVariants({ size: "lg" }), "inline-flex")}>
+          ابدأ التسوق
+        </Link>
       </div>
     );
   }

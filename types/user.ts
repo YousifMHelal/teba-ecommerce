@@ -1,9 +1,13 @@
-export type UserRole = "CUSTOMER" | "ADMIN"
+import { Address, Order, User } from "@prisma/client"
 
-export type User = {
-  id: string
-  name?: string | null
-  email?: string | null
-  image?: string | null
-  role: UserRole
+export type UserProfile = Pick<
+  User,
+  "id" | "name" | "email" | "image" | "role" | "createdAt"
+>
+
+export type AddressWithDefault = Address
+
+export type UserWithOrders = User & {
+  orders: Order[]
+  addresses: Address[]
 }
