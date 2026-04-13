@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Cairo, Inter } from "next/font/google";
-import { Providers } from "../components/shared/Providers";
+import Providers from "@/components/shared/Providers";
 import "./globals.css";
-
-
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -30,8 +28,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${inter.variable} font-sans antialiased`}>
-      <body className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(245,158,11,0.14),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(24,24,27,0.08),_transparent_28%),linear-gradient(180deg,_#faf7f2_0%,_#fffefc_40%,_#f7f3ee_100%)] text-foreground">
+    <html
+      lang="ar"
+      dir="rtl"
+      suppressHydrationWarning
+      className={`${cairo.variable} ${inter.variable} font-sans antialiased`}>
+      <body
+        suppressHydrationWarning
+        className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(245,158,11,0.14),transparent_30%),radial-gradient(circle_at_top_right,rgba(24,24,27,0.08),transparent_28%),linear-gradient(180deg,#faf7f2_0%,#fffefc_40%,#f7f3ee_100%)] text-foreground">
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -66,8 +66,8 @@ teba/
 ## Development Phases
 
 - [x] Phase 1 — Project Setup
-- [ ] Phase 2 — Database & Prisma
-- [ ] Phase 3 — Authentication
+- [x] Phase 2 — Database & Prisma
+- [x] Phase 3 — Authentication (Google OAuth + Email/Password, JWT, middleware, RTL Arabic UI)
 - [ ] Phase 4 — Product Catalog
 - [ ] Phase 5 — Cart (Zustand)
 - [ ] Phase 6 — Checkout & Orders

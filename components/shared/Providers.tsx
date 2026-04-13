@@ -10,7 +10,7 @@ type ProvidersProps = {
   children: ReactNode
 }
 
-export function Providers({ children }: ProvidersProps) {
+export default function Providers({ children }: ProvidersProps) {
   return (
     <SessionProvider>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
@@ -18,5 +18,5 @@ export function Providers({ children }: ProvidersProps) {
         <Toaster richColors closeButton />
       </ThemeProvider>
     </SessionProvider>
-  )
+  );
 }
