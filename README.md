@@ -70,7 +70,7 @@ teba/
 - [x] Phase 3 — Authentication (Google OAuth + Email/Password, JWT, middleware, RTL Arabic UI)
 - [x] Phase 4 — Product Catalog (Cloudinary, Algolia, Server Actions, RTL UI)
 - [x] Phase 5 — Cart (Zustand, CartDrawer, CartItem, CartSummary, cart page)
-- [ ] Phase 6 — Checkout & Orders
+- [x] Phase 6 — Checkout & Orders (Instapay, Vodafone Cash, Pay on Delivery)
 - [ ] Phase 7 — User Account
 - [ ] Phase 8 — Admin Dashboard
 - [ ] Phase 9 — Polish & Deploy

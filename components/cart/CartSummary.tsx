@@ -7,8 +7,7 @@ import { useCart } from "@/hooks/useCart";
 import { formatPrice } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-
-const SHIPPING_THRESHOLD = 20000;
+import { SHIPPING_COST, SHIPPING_THRESHOLD } from "@/lib/constants";
 
 export default function CartSummary({
   showCheckoutButton = true,
@@ -17,7 +16,7 @@ export default function CartSummary({
 }) {
   const { totalPrice, totalItems } = useCart();
   const isFreeShipping = totalPrice >= SHIPPING_THRESHOLD;
-  const shippingCost = isFreeShipping ? 0 : 100;
+  const shippingCost = isFreeShipping ? 0 : SHIPPING_COST;
   const grandTotal = totalPrice + shippingCost;
 
   return (

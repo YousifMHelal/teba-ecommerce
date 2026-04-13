@@ -1,8 +1,39 @@
-export const APP_NAME = "طيبة"
-export const APP_DESCRIPTION = "متجر طيبة الإلكتروني — تسوق بسهولة وأمان"
+export const APP_NAME = "تبعة"
+export const APP_DESCRIPTION = "متجر تبعة الإلكتروني — تسوق بسهولة وأمان"
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL!
 
 export const ITEMS_PER_PAGE = 12
+export const SHIPPING_THRESHOLD = 20000
+export const SHIPPING_COST = 100
+
+export const PAYMENT_METHODS = [
+  {
+    id: "INSTAPAY",
+    label: "Instapay",
+    description: "ادفع عبر Instapay وأدخل رقم المرجع",
+    icon: "💳",
+    requiresReference: true,
+    instructions:
+      "حوّل المبلغ إلى حساب Instapay: 01XXXXXXXXXX ثم أدخل رقم العملية أدناه",
+  },
+  {
+    id: "VODAFONE_CASH",
+    label: "Vodafone Cash",
+    description: "ادفع عبر Vodafone Cash وأدخل رقم المرجع",
+    icon: "📱",
+    requiresReference: true,
+    instructions:
+      "حوّل المبلغ إلى محفظة Vodafone Cash: 01XXXXXXXXXX ثم أدخل رقم العملية أدناه",
+  },
+  {
+    id: "PAY_ON_DELIVERY",
+    label: "الدفع عند الاستلام",
+    description: "ادفع نقداً عند استلام طلبك",
+    icon: "🚚",
+    requiresReference: false,
+    instructions: null,
+  },
+] as const
 
 export const ORDER_STATUS = {
   PENDING: "قيد الانتظار",
@@ -16,6 +47,12 @@ export const PAYMENT_STATUS = {
   UNPAID: "غير مدفوع",
   PAID: "مدفوع",
   REFUNDED: "مسترجع",
+} as const
+
+export const PAYMENT_METHOD_LABELS = {
+  INSTAPAY: "Instapay",
+  VODAFONE_CASH: "Vodafone Cash",
+  PAY_ON_DELIVERY: "الدفع عند الاستلام",
 } as const
 
 export const SORT_OPTIONS = [

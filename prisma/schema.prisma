@@ -26,6 +26,12 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum PaymentMethod {
+  INSTAPAY
+  VODAFONE_CASH
+  PAY_ON_DELIVERY
+}
+
 // ─── Auth Models (NextAuth required) ───────────────
 
 model User {
@@ -145,18 +151,19 @@ model CartItem {
 }
 
 model Order {
-  id              String        @id @default(cuid())
-  userId          String
-  user            User          @relation(fields: [userId], references: [id])
-  items           OrderItem[]
-  status          OrderStatus   @default(PENDING)
-  total           Float
-  shippingAddress Json
-  paymentMethod   String?
-  paymentStatus   PaymentStatus @default(UNPAID)
-  paymentIntentId String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id               String        @id @default(cuid())
+  userId           String
+  user             User          @relation(fields: [userId], references: [id])
+  items            OrderItem[]
+  status           OrderStatus   @default(PENDING)
+  total            Float
+  shippingAddress  Json
+  paymentMethod    PaymentMethod @default(PAY_ON_DELIVERY)
+  paymentStatus    PaymentStatus @default(UNPAID)
+  paymentReference String?
+  notes            String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
 }
 
 model OrderItem {

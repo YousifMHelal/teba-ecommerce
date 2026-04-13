@@ -1,21 +1,111 @@
-import { sampleProducts } from "@/lib/constants"
+"use client";
 
-export function OrderSummary() {
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useCart } from "@/hooks/useCart";
+import { formatPrice } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import { SHIPPING_THRESHOLD, SHIPPING_COST } from "@/lib/constants";
+
+export default function OrderSummary() {
+  const { items, totalPrice } = useCart();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div className="rounded-xl border bg-background p-5 space-y-4 sticky top-24">
+        <h2 className="font-bold text-base">ملخص الطلب</h2>
+        <div className="space-y-3 max-h-64 overflow-y-auto" />
+        <Separator />
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">المجموع الفرعي</span>
+            <span>{formatPrice(0)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted-foreground">الشحن</span>
+            <span>{formatPrice(SHIPPING_COST)}</span>
+          </div>
+        </div>
+        <Separator />
+        <div className="flex justify-between font-bold text-base">
+          <span>الإجمالي</span>
+          <span>{formatPrice(SHIPPING_COST)}</span>
+        </div>
+      </div>
+    );
+  }
+
+  const shippingCost = totalPrice >= SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const grandTotal = totalPrice + shippingCost;
+
   return (
-    <aside className="space-y-4 rounded-[1.5rem] border border-black/5 bg-white/90 p-6">
-      <h2 className="text-xl font-semibold text-zinc-950">Order summary</h2>
-      <div className="space-y-3">
-        {sampleProducts.slice(0, 2).map((product) => (
-          <div key={product.id} className="flex items-center justify-between text-sm text-zinc-600">
-            <span>{product.name}</span>
-            <span>${product.price.toFixed(2)}</span>
+    <div className="rounded-xl border bg-background p-5 space-y-4 sticky top-24">
+      <h2 className="font-bold text-base">ملخص الطلب</h2>
+
+      {/* Items */}
+      <div className="space-y-3 max-h-64 overflow-y-auto">
+        {items.map((item) => (
+          <div
+            key={`${item.id}-${item.variantId}`}
+            className="flex gap-3 items-start">
+            <div className="relative h-14 w-14 shrink-0 rounded-lg overflow-hidden bg-muted">
+              <Image
+                src={item.image || "/assets/placeholder.png"}
+                alt={item.name}
+                fill
+                className="object-cover"
+                sizes="56px"
+              />
+              <span className="absolute -top-1 -inset-e-1 h-4 w-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+                {item.quantity}
+              </span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium line-clamp-1">{item.name}</p>
+              {item.variantLabel && (
+                <p className="text-xs text-muted-foreground">
+                  {item.variantLabel}
+                </p>
+              )}
+              <p className="text-sm font-bold mt-0.5">
+                {formatPrice(item.price * item.quantity)}
+              </p>
+            </div>
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-between border-t border-black/5 pt-3 text-base font-semibold text-zinc-950">
-        <span>Total</span>
-        <span>$182.00</span>
+
+      <Separator />
+
+      {/* Totals */}
+      <div className="space-y-2 text-sm">
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">المجموع الفرعي</span>
+          <span>{formatPrice(totalPrice)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">الشحن</span>
+          {shippingCost === 0 ? (
+            <span className="text-green-600 font-medium">
+              مجاناً (فوق 20,000 ج.م)
+            </span>
+          ) : (
+            <span>{formatPrice(shippingCost)}</span>
+          )}
+        </div>
       </div>
-    </aside>
-  )
+
+      <Separator />
+
+      <div className="flex justify-between font-bold text-base">
+        <span>الإجمالي</span>
+        <span>{formatPrice(grandTotal)}</span>
+      </div>
+    </div>
+  );
 }
