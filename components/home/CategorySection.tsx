@@ -49,7 +49,9 @@ export default async function CategorySection() {
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {categories.length === 0
-          ? Array.from({ length: 6 }).map((_, index) => <CategorySkeleton key={index} />)
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <CategorySkeleton key={index} />
+            ))
           : categories.slice(0, 6).map((category, index) => (
               <Link
                 key={category.id ?? category.slug}
@@ -57,7 +59,13 @@ export default async function CategorySection() {
                 className="flex cursor-pointer flex-col items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-all duration-200 hover:border-[#00BFFF]/50 hover:bg-[#00BFFF]/5">
                 <div className="relative h-14 w-14 overflow-hidden rounded-xl">
                   {category.image ? (
-                    <Image src={category.image} alt={category.name} fill className="object-cover" />
+                    <Image
+                      src={category.image}
+                      alt={category.name}
+                      fill
+                      unoptimized
+                      className="object-cover"
+                    />
                   ) : (
                     <div
                       className={`flex h-full w-full items-center justify-center ${fallbackColors[index % fallbackColors.length]}`}>
@@ -72,5 +80,5 @@ export default async function CategorySection() {
             ))}
       </div>
     </section>
-  )
+  );
 }

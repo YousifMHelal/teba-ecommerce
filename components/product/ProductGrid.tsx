@@ -1,18 +1,19 @@
-import { sampleProducts } from "@/lib/constants"
-import type { Product } from "@/types"
+import type { ProductCardType } from "@/types";
 
-import { ProductCard } from "./ProductCard"
+import ProductCard from "./ProductCard";
 
 type ProductGridProps = {
-  products?: Product[]
-}
+  products?: ProductCardType[];
+};
 
-export function ProductGrid({ products = sampleProducts as unknown as Product[] }: ProductGridProps) {
+export default function ProductGrid({ products = [] }: ProductGridProps) {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </div>
-  )
+  );
 }
+
+export { ProductGrid };

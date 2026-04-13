@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import { FaFacebookF, FaWhatsapp } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import { APP_NAME } from "@/lib/constants";
 
 const quickLinks = [
   { href: "/", label: "الرئيسية" },
@@ -137,7 +138,7 @@ export function Footer() {
       <div className="border-t border-border px-10 py-4">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            © 2026 متجر طيبة - جميع الحقوق محفوظة
+            © {new Date().getFullYear()} {APP_NAME}. جميع الحقوق محفوظة.{" "}
           </p>
           <div className="flex items-center gap-2">
             <span className="h-2.5 w-2.5 rounded-full bg-[#00BFFF]" />
@@ -150,3 +151,5 @@ export function Footer() {
     </footer>
   );
 }
+
+export default Footer;

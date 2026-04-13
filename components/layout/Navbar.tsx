@@ -15,6 +15,7 @@ const navLinks = [
   { href: "/", label: "الرئيسية" },
   { href: "/shop", label: "المتجر" },
   { href: "/categories", label: "الفئات" },
+  { href: "/search", label: "البحث" },
   { href: "/about", label: "من نحن" },
 ] as const;
 
@@ -118,3 +119,5 @@ export function Navbar() {
     </header>
   );
 }
+
+export default Navbar;

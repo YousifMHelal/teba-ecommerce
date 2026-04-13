@@ -1,16 +1,27 @@
-import { NextResponse, type NextRequest } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
+import { auth } from "@/lib/auth"
+import { uploadImage } from "@/lib/cloudinary"
 
-export async function POST(request: NextRequest) {
-  const formData = await request.formData()
-  const file = formData.get("file")
+export async function POST(req: NextRequest) {
+  const session = await auth()
 
-  if (!(file instanceof File)) {
-    return NextResponse.json({ message: "No file provided" }, { status: 400 })
+  if (!session || session.user.role !== "ADMIN") {
+    return NextResponse.json({ error: "غير مصرح" }, { status: 401 })
   }
 
-  return NextResponse.json({
-    success: true,
-    filename: file.name,
-    size: file.size,
-  })
+  try {
+    const { image } = await req.json()
+
+    if (!image) {
+      return NextResponse.json({ error: "الصورة مطلوبة" }, { status: 400 })
+    }
+
+    const url = await uploadImage(image)
+    return NextResponse.json({ url })
+  } catch {
+    return NextResponse.json(
+      { error: "فشل رفع الصورة، حاول مرة أخرى" },
+      { status: 500 }
+    )
+  }
 }

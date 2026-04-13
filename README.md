@@ -68,7 +68,7 @@ teba/
 - [x] Phase 1 — Project Setup
 - [x] Phase 2 — Database & Prisma
 - [x] Phase 3 — Authentication (Google OAuth + Email/Password, JWT, middleware, RTL Arabic UI)
-- [ ] Phase 4 — Product Catalog
+- [x] Phase 4 — Product Catalog (Cloudinary, Algolia, Server Actions, RTL UI)
 - [ ] Phase 5 — Cart (Zustand)
 - [ ] Phase 6 — Checkout & Orders
 - [ ] Phase 7 — User Account

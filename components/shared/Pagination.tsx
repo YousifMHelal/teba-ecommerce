@@ -4,44 +4,48 @@ import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 type PaginationProps = {
-  page: number
-  totalPages: number
-}
+  page: number;
+  pages: number;
+};
 
-export function Pagination({ page, totalPages }: PaginationProps) {
+export default function Pagination({ page, pages }: PaginationProps) {
   return (
-    <div className="flex items-center justify-between gap-3">
+    <div className="mt-8 flex items-center justify-center gap-3">
       {page <= 1 ? (
         <span
           className={cn(
             buttonVariants({ variant: "outline" }),
             "pointer-events-none opacity-50",
-          )}
-        >
-          Previous
+          )}>
+          السابق
         </span>
       ) : (
-        <Link href={`?page=${Math.max(1, page - 1)}`} className={buttonVariants({ variant: "outline" })}>
-          Previous
+        <Link
+          href={`?page=${Math.max(1, page - 1)}`}
+          className={buttonVariants({ variant: "outline" })}>
+          السابق
         </Link>
       )}
       <p className="text-sm text-muted-foreground">
-        Page {page} of {totalPages}
+        صفحة {page} من {pages}
       </p>
-      {page >= totalPages ? (
+      {page >= pages ? (
         <span
           className={cn(
             buttonVariants({ variant: "outline" }),
             "pointer-events-none opacity-50",
-          )}
-        >
-          Next
+          )}>
+          التالي
         </span>
       ) : (
-        <Link href={`?page=${Math.min(totalPages, page + 1)}`} className={buttonVariants({ variant: "outline" })}>
-          Next
+        <Link
+          href={`?page=${Math.min(pages, page + 1)}`}
+          className={buttonVariants({ variant: "outline" })}>
+          التالي
         </Link>
       )}
     </div>
-  )
+  );
 }
+
+export { Pagination };

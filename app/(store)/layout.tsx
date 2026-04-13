@@ -1,12 +1,7 @@
-import type { ReactNode } from "react"
-
-import { Footer } from "@/components/layout/Footer";
-
-export default function StoreLayout({ children }: { children: ReactNode }) {
-  return (
-    <div className="flex min-h-screen flex-col">
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
-  );
+export default function StoreLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <main className="flex-1">{children}</main>;
 }

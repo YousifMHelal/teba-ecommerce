@@ -1,52 +1,83 @@
 import { create } from "zustand"
-import { createJSONStorage, persist } from "zustand/middleware"
+import { persist } from "zustand/middleware"
 
 export type CartItem = {
   id: string
   name: string
   price: number
+  image: string
+  slug: string
+  stock: number
+  variantId?: string
+  variantLabel?: string
   quantity: number
-  image?: string
 }
 
-type CartState = {
+type CartStore = {
   items: CartItem[]
-  addItem: (item: CartItem) => void
-  removeItem: (id: string) => void
-  updateQuantity: (id: string, quantity: number) => void
+  addItem: (item: Omit<CartItem, "quantity">) => void
+  removeItem: (id: string, variantId?: string) => void
+  updateQuantity: (id: string, quantity: number, variantId?: string) => void
   clearCart: () => void
-  subtotal: () => number
+  getTotalItems: () => number
+  getTotalPrice: () => number
 }
 
-export const useCartStore = create<CartState>()(
+export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      addItem: (item) =>
+
+      addItem: (item) => {
+        set((state) => {
+          const existing = state.items.find(
+            (i) => i.id === item.id && i.variantId === item.variantId
+          )
+          if (existing) {
+            return {
+              items: state.items.map((i) =>
+                i.id === item.id && i.variantId === item.variantId
+                  ? { ...i, quantity: Math.min(i.quantity + 1, i.stock) }
+                  : i
+              ),
+            }
+          }
+          return { items: [...state.items, { ...item, quantity: 1 }] }
+        })
+      },
+
+      removeItem: (id, variantId) => {
         set((state) => ({
-          items: state.items.some((existing) => existing.id === item.id)
-            ? state.items.map((existing) =>
-                existing.id === item.id
-                  ? { ...existing, quantity: existing.quantity + item.quantity }
-                  : existing,
-              )
-            : [...state.items, item],
-        })),
-      removeItem: (id) =>
-        set((state) => ({ items: state.items.filter((item) => item.id !== id) })),
-      updateQuantity: (id, quantity) =>
-        set((state) => ({
-          items: state.items.map((item) =>
-            item.id === id ? { ...item, quantity } : item,
+          items: state.items.filter(
+            (i) => !(i.id === id && i.variantId === variantId)
           ),
-        })),
+        }))
+      },
+
+      updateQuantity: (id, quantity, variantId) => {
+        if (quantity <= 0) {
+          get().removeItem(id, variantId)
+          return
+        }
+        set((state) => ({
+          items: state.items.map((i) =>
+            i.id === id && i.variantId === variantId
+              ? { ...i, quantity: Math.min(quantity, i.stock) }
+              : i
+          ),
+        }))
+      },
+
       clearCart: () => set({ items: [] }),
-      subtotal: () =>
-        get().items.reduce((total, item) => total + item.price * item.quantity, 0),
+
+      getTotalItems: () =>
+        get().items.reduce((sum, i) => sum + i.quantity, 0),
+
+      getTotalPrice: () =>
+        get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
     }),
     {
       name: "teba-cart",
-      storage: createJSONStorage(() => localStorage),
     },
   ),
 )
