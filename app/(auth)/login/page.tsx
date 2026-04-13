@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FaFacebookF, FaGoogle } from "react-icons/fa6";
+import { Eye, EyeOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +30,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -66,12 +68,12 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-lg items-center px-4 py-16">
-      <Card className="w-full border-black/5 bg-white/90 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.35)] backdrop-blur">
+      <Card className="w-full border-border bg-card/95 shadow-lg backdrop-blur">
         <CardHeader className="space-y-2 text-center">
-          <CardDescription className="text-xs uppercase tracking-[0.3em] text-zinc-500">
+          <CardDescription className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
             أهلاً بعودتك
           </CardDescription>
-          <CardTitle className="text-3xl font-semibold text-zinc-950">
+          <CardTitle className="text-3xl font-semibold text-foreground">
             تسجيل الدخول
           </CardTitle>
           <CardDescription>ادخل إلى حسابك للمتابعة في طيبة</CardDescription>
@@ -82,7 +84,7 @@ export default function LoginPage() {
             <Button
               type="button"
               variant="outline"
-              className="w-full cursor-pointer gap-2 rounded-full"
+              className="w-full cursor-pointer gap-2 rounded-full border-primary/40 text-primary hover:bg-primary/10"
               onClick={handleGoogleSignIn}
               disabled={isGoogleLoading}>
               <FaGoogle aria-hidden="true" className="size-4" />
@@ -92,7 +94,7 @@ export default function LoginPage() {
             <Button
               type="button"
               variant="outline"
-              className="w-full cursor-pointer gap-2 rounded-full"
+              className="w-full cursor-pointer gap-2 rounded-full border-primary/40 text-primary hover:bg-primary/10"
               onClick={() => signIn("facebook", { callbackUrl })}>
               <FaFacebookF aria-hidden="true" className="size-4" />
               Facebook
@@ -102,7 +104,7 @@ export default function LoginPage() {
           <div className="relative">
             <Separator />
             <span className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center">
-              <span className="bg-white px-2 text-xs text-muted-foreground">
+              <span className="bg-card px-2 text-xs text-muted-foreground">
                 أو
               </span>
             </span>
@@ -134,13 +136,27 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <Label htmlFor="password">كلمة المرور</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                dir="ltr"
-                {...register("password")}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  dir="ltr"
+                  className="pl-10"
+                  {...register("password")}
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
+                  className="absolute inset-y-0 left-2 flex items-center text-muted-foreground hover:text-foreground cursor-pointer"
+                  onClick={() => setShowPassword((prev) => !prev)}>
+                  {showPassword ? (
+                    <EyeOff className="size-4" aria-hidden="true" />
+                  ) : (
+                    <Eye className="size-4" aria-hidden="true" />
+                  )}
+                </button>
+              </div>
               {errors.password ? (
                 <p className="text-xs text-red-600">
                   {errors.password.message}

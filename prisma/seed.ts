@@ -38,11 +38,12 @@ async function main() {
 
   // Categories
   const categoryData = [
-    { name: "إلكترونيات", slug: "electronics" },
-    { name: "ملابس", slug: "clothing" },
-    { name: "المنزل والمطبخ", slug: "home-kitchen" },
-    { name: "الرياضة", slug: "sports" },
-    { name: "الكتب", slug: "books" },
+    { name: "سيرفاكتانت", slug: "surfactants" },
+    { name: "أحماض", slug: "acids" },
+    { name: "عطور ومعطرات", slug: "perfumes" },
+    { name: "مكثفات ومساعدات", slug: "thickeners" },
+    { name: "مبيضات", slug: "bleaching-agents" },
+    { name: "عبوات وتغليف", slug: "packaging" },
   ]
 
   const categories = await Promise.all(
@@ -60,59 +61,39 @@ async function main() {
   console.log(`✅ ${categories.length} categories created`)
 
   // Products
-  const electronics = categories.find((c) => c.slug === "electronics")!
-  const clothing = categories.find((c) => c.slug === "clothing")!
+  const surfactants = categories.find((c) => c.slug === "surfactants")!
+  const acids = categories.find((c) => c.slug === "acids")!
 
   const productsData = [
     {
-      name: "سماعات لاسلكية احترافية",
-      slug: "wireless-headphones-pro",
-      description: "سماعات لاسلكية عالية الجودة مع خاصية إلغاء الضوضاء وبطارية تدوم 30 ساعة",
-      price: 299.99,
-      comparePrice: 399.99,
-      images: ["https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800"],
-      stock: 50,
-      categoryId: electronics.id,
-      variants: {
-        create: [
-          { name: "اللون", value: "أسود", stock: 30 },
-          { name: "اللون", value: "أبيض", stock: 20 },
-        ],
-      },
+      name: "سيرفاكتانت عالي الجودة",
+      slug: "premium-surfactant",
+      description: "سيرفاكتانت عالي الجودة مناسب لصناعة المنظفات - نقاء 98%",
+      price: 45.99,
+      comparePrice: 59.99,
+      images: ["https://images.unsplash.com/photo-1584308666744-24d5f400f6f0?w=800"],
+      stock: 150,
+      categoryId: surfactants.id,
     },
     {
-      name: "ساعة ذكية متطورة",
-      slug: "smart-watch-advanced",
-      description: "ساعة ذكية مع شاشة AMOLED وتتبع صحي شامل ومقاومة للماء",
-      price: 199.99,
-      comparePrice: 249.99,
-      images: ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800"],
-      stock: 35,
-      categoryId: electronics.id,
-      variants: {
-        create: [
-          { name: "الحجم", value: "42mm", stock: 20 },
-          { name: "الحجم", value: "46mm", stock: 15 },
-        ],
-      },
+      name: "حمض الخليك الصناعي",
+      slug: "acetic-acid-industrial",
+      description: "حمض الخليك الصناعي بتركيز 99% - آمن وفعال للتنظيف",
+      price: 22.50,
+      comparePrice: 29.99,
+      images: ["https://images.unsplash.com/photo-1576937364205-d309bda59c5f?w=800"],
+      stock: 200,
+      categoryId: acids.id,
     },
     {
-      name: "قميص قطني كلاسيكي",
-      slug: "classic-cotton-shirt",
-      description: "قميص قطني 100% بقصة كلاسيكية مريحة مثالي للاستخدام اليومي",
-      price: 49.99,
-      comparePrice: 69.99,
-      images: ["https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800"],
-      stock: 100,
-      categoryId: clothing.id,
-      variants: {
-        create: [
-          { name: "المقاس", value: "S", stock: 25 },
-          { name: "المقاس", value: "M", stock: 35 },
-          { name: "المقاس", value: "L", stock: 25 },
-          { name: "المقاس", value: "XL", stock: 15 },
-        ],
-      },
+      name: "عطر زهري مركز",
+      slug: "floral-fragrance-concentrated",
+      description: "عطر زهري مركز عالي الجودة للمنظفات - رائحة دائمة",
+      price: 35.00,
+      comparePrice: 49.99,
+      images: ["https://images.unsplash.com/photo-1583394838888-aaf4fb8a0fe8?w=800"],
+      stock: 80,
+      categoryId: categories.find((c) => c.slug === "perfumes")!.id,
     },
   ]
 
