@@ -44,6 +44,10 @@ async function main() {
     { name: "مكثفات ومساعدات", slug: "thickeners" },
     { name: "مبيضات", slug: "bleaching-agents" },
     { name: "عبوات وتغليف", slug: "packaging" },
+    { name: "إنزيمات", slug: "enzymes" },
+    { name: "مطهرات", slug: "disinfectants" },
+    { name: "مذيبات", slug: "solvents" },
+    { name: "ملونات", slug: "colorants" },
   ]
 
   const categories = await Promise.all(
@@ -61,8 +65,7 @@ async function main() {
   console.log(`✅ ${categories.length} categories created`)
 
   // Products
-  const surfactants = categories.find((c) => c.slug === "surfactants")!
-  const acids = categories.find((c) => c.slug === "acids")!
+  const categoryBySlug = Object.fromEntries(categories.map((category) => [category.slug, category]))
 
   const productsData = [
     {
@@ -73,7 +76,7 @@ async function main() {
       comparePrice: 59.99,
       images: ["https://images.unsplash.com/photo-1584308666744-24d5f400f6f0?w=800"],
       stock: 150,
-      categoryId: surfactants.id,
+      categoryId: categoryBySlug.surfactants.id,
     },
     {
       name: "حمض الخليك الصناعي",
@@ -83,7 +86,7 @@ async function main() {
       comparePrice: 29.99,
       images: ["https://images.unsplash.com/photo-1576937364205-d309bda59c5f?w=800"],
       stock: 200,
-      categoryId: acids.id,
+      categoryId: categoryBySlug.acids.id,
     },
     {
       name: "عطر زهري مركز",
@@ -93,7 +96,77 @@ async function main() {
       comparePrice: 49.99,
       images: ["https://images.unsplash.com/photo-1583394838888-aaf4fb8a0fe8?w=800"],
       stock: 80,
-      categoryId: categories.find((c) => c.slug === "perfumes")!.id,
+      categoryId: categoryBySlug.perfumes.id,
+    },
+    {
+      name: "مكثف جل متعدد الاستخدام",
+      slug: "multi-purpose-gel-thickener",
+      description: "مكثف فعال لرفع لزوجة المنظفات السائلة بسهولة وثبات عالي.",
+      price: 28.00,
+      comparePrice: 34.00,
+      images: ["https://images.unsplash.com/photo-1544717305-2782549b5136?w=800"],
+      stock: 120,
+      categoryId: categoryBySlug.thickeners.id,
+    },
+    {
+      name: "مبيض أوكسجين آمن",
+      slug: "oxygen-safe-bleach",
+      description: "مبيض أوكسجين لطيف على الأقمشة وفعّال في إزالة البقع الصعبة.",
+      price: 31.50,
+      comparePrice: 39.50,
+      images: ["https://images.unsplash.com/photo-1626808642875-0aa545482dfb?w=800"],
+      stock: 95,
+      categoryId: categoryBySlug["bleaching-agents"].id,
+    },
+    {
+      name: "عبوة PET سعة 1 لتر",
+      slug: "pet-bottle-1l",
+      description: "عبوة PET شفافة سعة 1 لتر مناسبة لمنتجات التنظيف السائلة.",
+      price: 6.75,
+      comparePrice: 8.00,
+      images: ["https://images.unsplash.com/photo-1605600659908-0ef719419d41?w=800"],
+      stock: 500,
+      categoryId: categoryBySlug.packaging.id,
+    },
+    {
+      name: "إنزيم إزالة البقع",
+      slug: "stain-removal-enzyme",
+      description: "إنزيم عالي التركيز لتحسين أداء المنظفات ضد البقع العضوية.",
+      price: 52.00,
+      comparePrice: 63.00,
+      images: ["https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800"],
+      stock: 60,
+      categoryId: categoryBySlug.enzymes.id,
+    },
+    {
+      name: "مطهر مركز للأسطح",
+      slug: "surface-disinfectant-concentrate",
+      description: "تركيبة مطهرة مركزة للأسطح مع فعالية واسعة وسريعة.",
+      price: 41.00,
+      comparePrice: 49.00,
+      images: ["https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=800"],
+      stock: 110,
+      categoryId: categoryBySlug.disinfectants.id,
+    },
+    {
+      name: "مذيب دهون صناعي",
+      slug: "industrial-degreasing-solvent",
+      description: "مذيب قوي لإزالة الشحوم والزيوت من الأسطح المعدنية.",
+      price: 37.25,
+      comparePrice: 45.00,
+      images: ["https://images.unsplash.com/photo-1582719478185-2f9ef4f8fef3?w=800"],
+      stock: 140,
+      categoryId: categoryBySlug.solvents.id,
+    },
+    {
+      name: "ملون أزرق للمنظفات",
+      slug: "detergent-blue-colorant",
+      description: "ملون ثابت ومناسب لتركيبات المنظفات المنزلية والصناعية.",
+      price: 18.50,
+      comparePrice: 24.00,
+      images: ["https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800"],
+      stock: 170,
+      categoryId: categoryBySlug.colorants.id,
     },
   ]
 

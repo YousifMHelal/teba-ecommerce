@@ -69,7 +69,7 @@ teba/
 - [x] Phase 2 — Database & Prisma
 - [x] Phase 3 — Authentication (Google OAuth + Email/Password, JWT, middleware, RTL Arabic UI)
 - [x] Phase 4 — Product Catalog (Cloudinary, Algolia, Server Actions, RTL UI)
-- [ ] Phase 5 — Cart (Zustand)
+- [x] Phase 5 — Cart (Zustand, CartDrawer, CartItem, CartSummary, cart page)
 - [ ] Phase 6 — Checkout & Orders
 - [ ] Phase 7 — User Account
 - [ ] Phase 8 — Admin Dashboard

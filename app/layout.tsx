@@ -1,21 +1,27 @@
 import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+
 import Providers from "@/components/shared/Providers";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import CartDrawer from "@/components/cart/CartDrawer";
+import { APP_NAME, APP_DESCRIPTION } from "@/lib/constants";
 import "./globals.css";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-cairo",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Teba",
-  description: "Teba is a modern single-vendor e-commerce storefront.",
+  title: {
+    default: `${APP_NAME} | متجر إلكتروني`,
+    template: `%s | ${APP_NAME}`,
+  },
+  description: APP_DESCRIPTION,
 };
 
 export default function RootLayout({
@@ -28,10 +34,10 @@ export default function RootLayout({
       lang="ar"
       dir="rtl"
       suppressHydrationWarning
-      className={`${cairo.className} ${cairo.variable} antialiased`}>
+      className={cairo.variable}>
       <body
         suppressHydrationWarning
-        className="min-h-screen bg-background text-foreground">
+        className="min-h-screen bg-background text-foreground antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -40,6 +46,7 @@ export default function RootLayout({
             <div className="flex min-h-screen flex-col">
               <Navbar />
               <main className="flex-1">{children}</main>
+              <CartDrawer />
               <Footer />
             </div>
           </Providers>
