@@ -1,10 +1,10 @@
-import Link from "next/link";
-
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils"
 import { sampleProducts } from "@/lib/constants";
+import Link from "next/link";
+import { Badge } from "../components/ui/badge";
+import { buttonVariants } from "../components/ui/button";
+import { cn } from "@/lib/utils";
+
 
 const metrics = [
   { value: "12k+", label: "Orders shipped" },

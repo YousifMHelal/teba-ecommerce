@@ -21,7 +21,7 @@ A full-featured single-vendor e-commerce store built with the modern Next.js sta
 
 ### 1. Install dependencies
 ```bash
-pnpm install
+npm install
 ```
 
 ### 2. Set up environment variables
@@ -32,13 +32,13 @@ cp .env.example .env.local
 
 ### 3. Set up the database
 ```bash
-pnpm dlx prisma migrate dev
-pnpm dlx prisma db seed
+npm dlx prisma migrate dev
+npm dlx prisma db seed
 ```
 
 ### 4. Run the development server
 ```bash
-pnpm dev
+npm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
