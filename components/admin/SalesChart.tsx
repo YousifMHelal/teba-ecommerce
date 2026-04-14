@@ -1,14 +1,91 @@
-export function SalesChart() {
-  const bars = [42, 65, 48, 78, 60, 90]
+"use client";
 
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+
+import { formatPrice } from "@/lib/utils";
+
+type DataPoint = {
+  month: string;
+  revenue: number;
+  orders: number;
+};
+
+export function SalesChart({ data }: { data: DataPoint[] }) {
   return (
-    <div className="flex h-64 items-end gap-3 rounded-[1.5rem] border border-black/5 bg-white/90 p-6">
-      {bars.map((bar, index) => (
-        <div key={index} className="flex flex-1 flex-col items-center gap-3">
-          <div className="w-full rounded-full bg-zinc-950/10" style={{ height: `${bar}%` }} />
-          <span className="text-xs text-zinc-500">W{index + 1}</span>
-        </div>
-      ))}
+    <div className="rounded-xl border bg-background p-5 shadow-sm">
+      <h2 className="mb-4 text-sm font-bold">المبيعات - آخر 7 أشهر</h2>
+      <ResponsiveContainer width="100%" height={300}>
+        <AreaChart
+          data={data}
+          margin={{ top: 5, right: 10, left: 10, bottom: 0 }}>
+          <defs>
+            <linearGradient id="revenue" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.18} />
+              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+            </linearGradient>
+            <linearGradient id="orders" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#10b981" stopOpacity={0.18} />
+              <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+          <XAxis
+            dataKey="month"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            width={64}
+            tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+            tickFormatter={(value) => formatPrice(Number(value))}
+          />
+          <Tooltip
+            contentStyle={{
+              background: "hsl(var(--background))",
+              border: "1px solid hsl(var(--border))",
+              borderRadius: 8,
+              fontSize: 12,
+            }}
+            formatter={(value: number, name: string) => [
+              name === "revenue" ? formatPrice(value) : value,
+              name === "revenue" ? "الإيرادات" : "الطلبات",
+            ]}
+          />
+          <Legend
+            formatter={(value) =>
+              value === "revenue" ? "الإيرادات" : "الطلبات"
+            }
+            iconType="circle"
+            iconSize={8}
+          />
+          <Area
+            type="monotone"
+            dataKey="revenue"
+            stroke="#3b82f6"
+            strokeWidth={2}
+            fill="url(#revenue)"
+          />
+          <Area
+            type="monotone"
+            dataKey="orders"
+            stroke="#10b981"
+            strokeWidth={2}
+            fill="url(#orders)"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
     </div>
-  )
+  );
 }

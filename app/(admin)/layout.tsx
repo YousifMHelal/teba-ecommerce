@@ -1,12 +1,33 @@
 import type { ReactNode } from "react"
 
-import { AdminSidebar } from "@/components/layout/AdminSidebar"
+import { redirect } from "next/navigation";
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
+import { auth } from "@/lib/auth";
+import { AdminTopbar } from "../../components/layout/AdminTopbar";
+import { AdminSidebar } from "@/components/layout/AdminSidebar";
+
+export default async function AdminLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const session = await auth();
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  if (session.user.role !== "ADMIN") {
+    redirect("/");
+  }
+
   return (
-    <div className="mx-auto grid min-h-screen w-full max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-8">
+    <div className="flex min-h-screen bg-muted/30">
       <AdminSidebar />
-      <div>{children}</div>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <AdminTopbar user={session.user} />
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+      </div>
     </div>
-  )
+  );
 }

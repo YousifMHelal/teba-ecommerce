@@ -199,12 +199,115 @@ export async function updatePaymentStatus(
   return order
 }
 
-export async function getAllOrders(page = 1, status?: string) {
+export async function cancelAndDeleteMyOrder(id: string) {
+  const session = await auth()
+  if (!session?.user?.id) {
+    return { success: false, error: "يجب تسجيل الدخول أولاً" }
+  }
+
+  const order = await prisma.order.findFirst({
+    where: {
+      id,
+      userId: session.user.id,
+    },
+    select: {
+      id: true,
+      status: true,
+    },
+  })
+
+  if (!order) {
+    return { success: false, error: "الطلب غير موجود" }
+  }
+
+  if (order.status === "SHIPPED" || order.status === "DELIVERED") {
+    return {
+      success: false,
+      error: "لا يمكن إلغاء أو حذف الطلب بعد الشحن أو التوصيل",
+    }
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      await tx.order.update({
+        where: { id },
+        data: { status: "CANCELLED" },
+      })
+
+      await tx.order.delete({ where: { id } })
+    })
+
+    revalidatePath("/account/orders")
+    revalidatePath(`/account/orders/${id}`)
+    revalidatePath("/admin/orders")
+    revalidatePath(`/admin/orders/${id}`)
+
+    return { success: true }
+  } catch (error) {
+    console.error("cancelAndDeleteMyOrder error:", error)
+    return { success: false, error: "تعذر إلغاء وحذف الطلب، حاول مرة أخرى" }
+  }
+}
+
+export async function getAllOrders(
+  page = 1,
+  filters?: {
+    search?: string
+    status?: string
+    paymentStatus?: string
+    paymentMethod?: string
+  }
+) {
   const session = await auth()
   if (session?.user?.role !== "ADMIN") throw new Error("غير مصرح")
 
   const PAGE_SIZE = 20
-  const where = status ? { status: status as any } : {}
+  const where = {
+    ...(filters?.status ? { status: filters.status as any } : {}),
+    ...(filters?.paymentStatus
+      ? { paymentStatus: filters.paymentStatus as any }
+      : {}),
+    ...(filters?.paymentMethod
+      ? { paymentMethod: filters.paymentMethod as any }
+      : {}),
+    ...(filters?.search
+      ? {
+        OR: [
+          { id: { contains: filters.search, mode: "insensitive" as const } },
+          {
+            user: {
+              OR: [
+                {
+                  name: {
+                    contains: filters.search,
+                    mode: "insensitive" as const,
+                  },
+                },
+                {
+                  email: {
+                    contains: filters.search,
+                    mode: "insensitive" as const,
+                  },
+                },
+              ],
+            },
+          },
+          {
+            paymentReference: {
+              contains: filters.search,
+              mode: "insensitive" as const,
+            },
+          },
+          {
+            notes: {
+              contains: filters.search,
+              mode: "insensitive" as const,
+            },
+          },
+        ],
+      }
+      : {}),
+  }
 
   const [orders, total] = await Promise.all([
     prisma.order.findMany({

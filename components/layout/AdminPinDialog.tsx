@@ -17,26 +17,24 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { verifyAdminDashboardPin } from "@/lib/actions/admin-settings.actions";
+import { ADMIN_DASHBOARD_PIN_LENGTH } from "@/lib/admin-pin";
 
 type AdminPinDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  expectedPin: string;
   onSuccess: () => void;
 };
 
 export function AdminPinDialog({
   open,
   onOpenChange,
-  expectedPin,
   onSuccess,
 }: AdminPinDialogProps) {
-  const PIN_LENGTH = 6;
+  const PIN_LENGTH = ADMIN_DASHBOARD_PIN_LENGTH;
   const [pinValue, setPinValue] = useState("");
   const [pinError, setPinError] = useState<string | null>(null);
-  const normalizedExpectedPin = /^\d{6}$/.test(expectedPin)
-    ? expectedPin
-    : "123456";
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const resetState = () => {
     setPinValue("");
@@ -48,16 +46,26 @@ export function AdminPinDialog({
     onOpenChange(false);
   };
 
-  const validatePin = (value: string) => {
-    if (value !== normalizedExpectedPin) {
-      setPinError("رمز PIN غير صحيح");
-      setPinValue("");
-      return;
-    }
+  const validatePin = async (value: string) => {
+    try {
+      setIsVerifying(true);
+      const result = await verifyAdminDashboardPin(value);
+      setIsVerifying(false);
 
-    resetState();
-    onOpenChange(false);
-    onSuccess();
+      if (!result.success) {
+        setPinError(result.error ?? "رمز PIN غير صحيح");
+        setPinValue("");
+        return;
+      }
+
+      resetState();
+      onOpenChange(false);
+      onSuccess();
+    } catch {
+      setIsVerifying(false);
+      setPinError("تعذر التحقق من الرمز، حاول مرة أخرى");
+      setPinValue("");
+    }
   };
 
   return (
@@ -88,7 +96,7 @@ export function AdminPinDialog({
                 رمز الدخول للوحة التحكم
               </DialogTitle>
               <DialogDescription className="mt-1 text-sm leading-6">
-              أدخل رمز PIN المكون من 6 أرقام للوصول إلى لوحة التحكم.
+                أدخل رمز PIN المكون من 6 أرقام للوصول إلى لوحة التحكم.
               </DialogDescription>
             </div>
           </div>
@@ -104,7 +112,7 @@ export function AdminPinDialog({
               if (pinError) setPinError(null);
 
               if (value.length === PIN_LENGTH) {
-                validatePin(value);
+                void validatePin(value);
               }
             }}>
             <InputOTPGroup className="mx-auto gap-2" dir="ltr">
@@ -133,15 +141,19 @@ export function AdminPinDialog({
         <DialogFooter
           className="grid grid-cols-2 gap-2 border-0 bg-muted/20 px-6 pb-6 pt-2"
           showCloseButton={false}>
-          <Button type="button" variant="outline" size="lg" onClick={closeDialog}>
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            onClick={closeDialog}>
             إلغاء
           </Button>
           <Button
             type="button"
             size="lg"
-            onClick={() => validatePin(pinValue)}
-            disabled={pinValue.length !== PIN_LENGTH}>
-            متابعة
+            onClick={() => void validatePin(pinValue)}
+            disabled={pinValue.length !== PIN_LENGTH || isVerifying}>
+            {isVerifying ? "جارٍ التحقق..." : "متابعة"}
           </Button>
         </DialogFooter>
       </DialogContent>

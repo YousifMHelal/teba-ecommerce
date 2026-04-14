@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { FlaskConical } from "lucide-react";
+import { getProductPlaceholder } from "@/lib/product-placeholders";
 
 type ProductImageWithFallbackProps = {
   src?: string | null;
@@ -11,6 +12,8 @@ type ProductImageWithFallbackProps = {
   iconClassName?: string;
   className?: string;
   priority?: boolean;
+  categoryName?: string;
+  usePlaceholderImage?: boolean;
 };
 
 export default function ProductImageWithFallback({
@@ -20,10 +23,13 @@ export default function ProductImageWithFallback({
   iconClassName = "h-10 w-10",
   className = "",
   priority = false,
+  categoryName,
+  usePlaceholderImage = false,
 }: ProductImageWithFallbackProps) {
   const [failed, setFailed] = useState(false);
   const safeSrc = typeof src === "string" ? src.trim() : "";
   const showImage = safeSrc.length > 0 && !failed;
+  const placeholderImage = usePlaceholderImage ? getProductPlaceholder(categoryName) : null;
 
   if (showImage) {
     return (
@@ -35,6 +41,19 @@ export default function ProductImageWithFallback({
         priority={priority}
         onError={() => setFailed(true)}
         className={className || "object-cover"}
+      />
+    );
+  }
+
+  if (placeholderImage) {
+    return (
+      <Image
+        src={placeholderImage}
+        alt={alt}
+        fill
+        unoptimized
+        priority={priority}
+        className={className || "object-contain p-4"}
       />
     );
   }

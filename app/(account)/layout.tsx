@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import AccountSidebar from "@/components/layout/AccountSidebar";
+import { AppBreadcrumb } from "@/components/layout/AppBreadcrumb";
 import { auth } from "@/lib/auth";
 
 export default async function AccountLayout({
@@ -15,11 +16,15 @@ export default async function AccountLayout({
 
   return (
     <div className="container mx-auto px-4 py-8 flex-1">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <aside className="md:col-span-1">
+      <div className="flex flex-col gap-8 md:flex-row md:items-start">
+        <aside className="md:sticky md:top-24 md:h-[calc(100vh-6rem)] md:w-80 md:shrink-0">
           <AccountSidebar user={session.user} />
         </aside>
-        <main className="md:col-span-3">{children}</main>
+
+        <div className="flex-1 min-w-0 space-y-8">
+          <AppBreadcrumb />
+          <main>{children}</main>
+        </div>
       </div>
     </div>
   );

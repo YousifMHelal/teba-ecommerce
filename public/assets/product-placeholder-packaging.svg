@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB800;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#CC8800;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#grad4)"/>
+  <!-- Container -->
+  <rect x="70" y="60" width="60" height="80" rx="3" fill="none" stroke="#FFB800" stroke-width="2.5"/>
+  <ellipse cx="100" cy="60" rx="30" ry="8" fill="none" stroke="#FFB800" stroke-width="2.5"/>
+  <!-- Liquid level -->
+  <rect x="70" y="110" width="60" height="30" fill="#FFB800" opacity="0.2"/>
+  <ellipse cx="100" cy="110" rx="30" ry="6" fill="#FFB800" opacity="0.3"/>
+  <!-- Label -->
+  <rect x="75" y="85" width="50" height="15" fill="#FFB800" opacity="0.15" rx="2"/>
+</svg>

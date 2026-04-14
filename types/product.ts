@@ -30,4 +30,5 @@ export type ProductFiltersType = {
   sort?: string
   page?: number
   search?: string
+  includeInactive?: boolean
 }

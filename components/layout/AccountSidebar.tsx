@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { User, Package, MapPin, LogOut, ShieldCheck } from "lucide-react";
 import { signOut } from "next-auth/react";
 
+import { AdminPinDialog } from "@/components/layout/AdminPinDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
@@ -25,9 +27,15 @@ type Props = {
 
 export default function AccountSidebar({ user }: Props) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isPinDialogOpen, setIsPinDialogOpen] = useState(false);
+
+  const openPinDialog = () => {
+    setIsPinDialogOpen(true);
+  };
 
   return (
-    <div className="space-y-2">
+    <div className="flex h-full flex-col space-y-2">
       <div className="rounded-xl border bg-background p-4 flex items-center gap-3 mb-4">
         <Avatar className="h-10 w-10 capitalize">
           <AvatarImage src={user.image ?? ""} alt={user.name ?? ""} />
@@ -41,7 +49,7 @@ export default function AccountSidebar({ user }: Props) {
         </div>
       </div>
 
-      <nav className="space-y-1">
+      <nav className="flex-1 space-y-1">
         {navItems.map(({ href, label, icon: Icon }) => (
           <Link
             key={href}
@@ -60,6 +68,10 @@ export default function AccountSidebar({ user }: Props) {
         {user.role === "ADMIN" && (
           <Link
             href="/admin"
+            onClick={(event) => {
+              event.preventDefault();
+              openPinDialog();
+            }}
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
               pathname.startsWith("/admin")
@@ -78,6 +90,12 @@ export default function AccountSidebar({ user }: Props) {
           تسجيل الخروج
         </button>
       </nav>
+
+      <AdminPinDialog
+        open={isPinDialogOpen}
+        onOpenChange={setIsPinDialogOpen}
+        onSuccess={() => router.push("/admin")}
+      />
     </div>
   );
 }

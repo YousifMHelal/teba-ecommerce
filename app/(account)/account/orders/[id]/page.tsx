@@ -15,6 +15,8 @@ import {
 } from "@/lib/constants";
 import { cn, formatPrice } from "@/lib/utils";
 
+import CancelDeleteOrderButton from "./_components/CancelDeleteOrderButton";
+
 export const dynamic = "force-dynamic";
 
 type PageProps = { params: Promise<{ id: string }> };
@@ -95,6 +97,12 @@ export default async function OrderDetailPage({ params }: PageProps) {
             {ORDER_STATUS[order.status]}
           </span>
         </div>
+
+        {(order.status === "PENDING" || order.status === "PROCESSING") && (
+          <div className="mt-4 flex justify-end">
+            <CancelDeleteOrderButton orderId={order.id} />
+          </div>
+        )}
       </div>
 
       {order.status !== "CANCELLED" && (
@@ -144,9 +152,9 @@ export default async function OrderDetailPage({ params }: PageProps) {
 
       <div className="rounded-xl border bg-background p-5 space-y-4">
         <h2 className="font-semibold text-sm">المنتجات</h2>
-        <div className="space-y-3 divide-y">
+        <div className="divide-y">
           {order.items.map((item) => (
-            <div key={item.id} className="flex gap-3 pt-3 first:pt-0">
+            <div key={item.id} className="flex gap-3 py-3 first:pt-0 last:pb-0">
               <Link
                 href={`/shop/${item.product.slug}`}
                 className="relative h-16 w-16 shrink-0 rounded-lg overflow-hidden bg-muted">
@@ -206,20 +214,11 @@ export default async function OrderDetailPage({ params }: PageProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="rounded-xl border bg-background p-4 space-y-2">
           <h2 className="font-semibold text-sm">معلومات الدفع</h2>
-          <div className="space-y-1.5 text-sm">
+          <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">الطريقة</span>
               <span className="font-medium">
                 {PAYMENT_METHOD_LABELS[order.paymentMethod]}
-              </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-muted-foreground">الحالة</span>
-              <span
-                className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                  paymentStatusColors[order.paymentStatus]
-                }`}>
-                {PAYMENT_STATUS[order.paymentStatus]}
               </span>
             </div>
             {order.paymentReference && (
@@ -230,6 +229,15 @@ export default async function OrderDetailPage({ params }: PageProps) {
                 </span>
               </div>
             )}
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground">الحالة</span>
+              <span
+                className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                  paymentStatusColors[order.paymentStatus]
+                }`}>
+                {PAYMENT_STATUS[order.paymentStatus]}
+              </span>
+            </div>
           </div>
         </div>
 

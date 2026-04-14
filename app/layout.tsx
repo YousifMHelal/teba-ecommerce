@@ -5,7 +5,7 @@ import { ThemeProvider } from "next-themes";
 import Providers from "@/components/shared/Providers";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { AppBreadcrumb } from "@/components/layout/AppBreadcrumb";
+import { RootBreadcrumb } from "@/components/layout/RootBreadcrumb";
 import CartDrawer from "@/components/cart/CartDrawer";
 import { APP_NAME, APP_DESCRIPTION } from "@/lib/constants";
 import "./globals.css";
@@ -47,7 +47,7 @@ export default function RootLayout({
             <div className="flex min-h-screen flex-col">
               <Navbar />
               <main className="flex-1">
-                <AppBreadcrumb />
+                <RootBreadcrumb />
                 {children}
               </main>
               <CartDrawer />

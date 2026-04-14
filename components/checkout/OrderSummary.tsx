@@ -60,21 +60,23 @@ export default function OrderSummary() {
           return (
             <div
               key={`${item.id}-${item.variantId}`}
-              className="flex gap-3 items-start">
-              <div className="relative h-14 w-14 shrink-0 rounded-lg overflow-hidden bg-muted">
-                <Image
-                  src={
-                    hasImage ? item.image!.trim() : "/assets/placeholder.png"
-                  }
-                  alt="صورة المنتج"
-                  fill
-                  className="object-cover"
-                  sizes="56px"
-                  onError={() =>
-                    setFailedImages((prev) => ({ ...prev, [imageKey]: true }))
-                  }
-                />
-                <span className="absolute -top-1 -inset-e-1 h-4 w-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+              className="flex gap-3 items-start pt-1">
+              <div className="relative h-14 w-14 shrink-0">
+                <div className="relative h-full w-full rounded-lg overflow-hidden bg-muted">
+                  <Image
+                    src={
+                      hasImage ? item.image!.trim() : "/assets/placeholder.png"
+                    }
+                    alt="صورة المنتج"
+                    fill
+                    className="object-cover"
+                    sizes="56px"
+                    onError={() =>
+                      setFailedImages((prev) => ({ ...prev, [imageKey]: true }))
+                    }
+                  />
+                </div>
+                <span className="absolute -top-1 -inset-e-1 z-10 h-4 w-4 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
                   {item.quantity}
                 </span>
               </div>

@@ -46,9 +46,14 @@ export function AppBreadcrumb() {
   const pathname = usePathname()
   const segments = pathname.split("/").filter(Boolean)
   const isProductDetailsPage = segments.length === 2 && segments[0] === "shop"
+  const hideOnRoutes = new Set(["/login", "/register", "/admin"]);
 
-  if (segments.length === 0) {
-    return null
+  if (
+    segments.length === 0 ||
+    hideOnRoutes.has(pathname) ||
+    pathname.startsWith("/admin")
+  ) {
+    return null;
   }
 
   return (

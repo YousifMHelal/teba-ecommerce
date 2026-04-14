@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { checkoutSchema, CheckoutInput } from "@/lib/validations";
@@ -70,6 +70,7 @@ export default function CheckoutForm({
     setValue,
     watch,
     formState: { errors },
+    control,
   } = useForm<CheckoutInput>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
@@ -190,11 +191,20 @@ export default function CheckoutForm({
             ملاحظات للطلب{" "}
             <span className="text-muted-foreground text-xs">(اختياري)</span>
           </Label>
-          <Textarea
-            id="notes"
-            placeholder="أي تعليمات خاصة للتوصيل..."
-            rows={2}
-            {...register("notes")}
+          <Controller
+            name="notes"
+            control={control}
+            render={({ field }) => (
+              <Textarea
+                id="notes"
+                placeholder="أي تعليمات خاصة للتوصيل..."
+                rows={2}
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+              />
+            )}
           />
         </div>
       </div>
