@@ -273,13 +273,25 @@ export async function setDefaultAddress(id: string) {
   }
 }
 
-export async function getAllUsers(page = 1) {
+export async function getAllUsers(page = 1, search = "", role: "ALL" | "USER" | "ADMIN" = "ALL") {
   const session = await auth()
   if (session?.user?.role !== "ADMIN") throw new Error("غير مصرح")
 
   const PAGE_SIZE = 20
+
+  const where = {
+    ...(search && {
+      OR: [
+        { name: { contains: search, mode: "insensitive" as const } },
+        { email: { contains: search, mode: "insensitive" as const } },
+      ],
+    }),
+    ...(role !== "ALL" && { role }),
+  }
+
   const [users, total] = await Promise.all([
     prisma.user.findMany({
+      where,
       select: {
         id: true,
         name: true,
@@ -293,7 +305,7 @@ export async function getAllUsers(page = 1) {
       skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
     }),
-    prisma.user.count(),
+    prisma.user.count({ where }),
   ])
 
   return { users, total, pages: Math.ceil(total / PAGE_SIZE) }
@@ -306,4 +318,20 @@ export async function deleteUser(id: string) {
   await prisma.user.delete({ where: { id } })
   revalidatePath("/admin/users")
   return { success: true }
+}
+
+export async function updateUserRole(id: string, role: "USER" | "ADMIN") {
+  const session = await auth()
+  if (session?.user?.role !== "ADMIN") throw new Error("غير مصرح")
+
+  try {
+    await prisma.user.update({
+      where: { id },
+      data: { role },
+    })
+    revalidatePath("/admin/users")
+    return { success: true }
+  } catch {
+    return { success: false, error: "حدث خطأ أثناء تحديث الصلاحية" }
+  }
 }

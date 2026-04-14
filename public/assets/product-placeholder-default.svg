@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7B2FFF;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#5511CC;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#grad5)"/>
+  <!-- Lab flask icon (chemical/science theme) -->
+  <path d="M 65 75 L 70 55 L 130 55 L 135 75 Q 135 88 125 100 L 75 100 Q 65 88 65 75" fill="none" stroke="#7B2FFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 75 100 Q 75 115 80 135 L 120 135 Q 125 115 125 100" fill="#7B2FFF" opacity="0.25"/>
+  <rect x="95" y="50" width="10" height="8" fill="#7B2FFF" opacity="0.3"/>
+</svg>

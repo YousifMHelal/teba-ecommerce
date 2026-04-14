@@ -24,11 +24,16 @@ export default function ProductFilters({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const searchParamsString = searchParams.toString();
   const [search, setSearch] = useState(searchParams.get("search") || "");
   const debouncedSearch = useDebounce(search, 400);
 
   const currentCategory = searchParams.get("category") || "all";
   const currentSort = searchParams.get("sort") || "createdAt_desc";
+
+  useEffect(() => {
+    setSearch(searchParams.get("search") || "");
+  }, [searchParamsString, searchParams]);
 
   const currentCategoryLabel = useMemo(() => {
     if (currentCategory === "all") return "كل الفئات";
@@ -55,7 +60,7 @@ export default function ProductFilters({
       params.delete("page");
       router.push(`${pathname}?${params.toString()}`);
     },
-    [router, pathname, searchParams],
+    [router, pathname, searchParamsString],
   );
 
   const clearFilters = () => {
@@ -67,7 +72,7 @@ export default function ProductFilters({
     const currentSearchParam = searchParams.get("search") || "";
     if (debouncedSearch === currentSearchParam) return;
     updateFilter("search", debouncedSearch.trim());
-  }, [debouncedSearch, searchParams, updateFilter]);
+  }, [debouncedSearch, searchParamsString, updateFilter, searchParams]);
 
   const hasFilters =
     searchParams.has("search") ||

@@ -1,4 +1,7 @@
+"use client"
+
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import { FaFacebookF, FaWhatsapp } from "react-icons/fa";
@@ -46,6 +49,12 @@ const socialLinks = [
 ] as const;
 
 export function Footer() {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <footer dir="rtl" className="mt-10 border-t border-border bg-card">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 p-10 md:grid-cols-4">

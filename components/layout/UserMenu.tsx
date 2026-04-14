@@ -10,6 +10,7 @@ import {
   Home,
   LogOut,
   Moon,
+  Package,
   Settings2,
   Sun,
   LayoutDashboard,
@@ -81,7 +82,6 @@ export function UserMenu() {
   const user = session?.user;
   const isAdmin = user?.role === "ADMIN";
   const isInAdminDashboard = pathname.startsWith("/admin");
-  const dashboardPin = process.env.NEXT_PUBLIC_ADMIN_DASHBOARD_PIN ?? "123456";
   const avatarColor = getAvatarColor(user?.email);
 
   const openPinDialog = () => {
@@ -169,6 +169,17 @@ export function UserMenu() {
         </DropdownMenuItem>
 
         <DropdownMenuItem
+          render={
+            <Link
+              href="/account/orders"
+              className="flex w-full items-center justify-start cursor-pointer gap-2 rounded-md px-1.5 py-1 text-right text-sm outline-none select-none"
+            />
+          }>
+          <Package className="size-4" />
+          الطلبات
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
           className="flex w-full items-center justify-start cursor-pointer gap-2 text-right"
           onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
           disabled={!mounted}>
@@ -197,7 +208,6 @@ export function UserMenu() {
       <AdminPinDialog
         open={isPinDialogOpen}
         onOpenChange={setIsPinDialogOpen}
-        expectedPin={dashboardPin}
         onSuccess={() => router.push("/admin")}
       />
     </DropdownMenu>

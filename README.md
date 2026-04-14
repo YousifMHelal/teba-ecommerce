@@ -72,5 +72,5 @@ teba/
 - [x] Phase 5 — Cart (Zustand, CartDrawer, CartItem, CartSummary, cart page)
 - [x] Phase 6 — Checkout & Orders (Instapay, Vodafone Cash, Pay on Delivery)
 - [x] Phase 7 — User Account (profile, password, orders list, order detail, addresses)
-- [ ] Phase 8 — Admin Dashboard
+- [x] Phase 8 — Admin Dashboard
 - [ ] Phase 9 — Polish & Deploy

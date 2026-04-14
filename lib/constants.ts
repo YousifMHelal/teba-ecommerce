@@ -6,6 +6,13 @@ export const ITEMS_PER_PAGE = 12
 export const SHIPPING_THRESHOLD = 20000
 export const SHIPPING_COST = 100
 
+// Product Image Placeholders
+export const PRODUCT_PLACEHOLDER_DEFAULT = "/assets/product-placeholder-default.svg"
+export const PRODUCT_PLACEHOLDER_SURFACTANTS = "/assets/product-placeholder-surfactants.svg"
+export const PRODUCT_PLACEHOLDER_ACIDS = "/assets/product-placeholder-acids.svg"
+export const PRODUCT_PLACEHOLDER_PERFUMES = "/assets/product-placeholder-perfumes.svg"
+export const PRODUCT_PLACEHOLDER_PACKAGING = "/assets/product-placeholder-packaging.svg"
+
 export const PAYMENT_METHODS = [
   {
     id: "INSTAPAY",
@@ -38,7 +45,7 @@ export const PAYMENT_METHODS = [
 export const ORDER_STATUS = {
   PENDING: "قيد الانتظار",
   PROCESSING: "قيد المعالجة",
-  SHIPPED: "تم الشحن",
+  SHIPPED: "جاري الشحن",
   DELIVERED: "تم التوصيل",
   CANCELLED: "ملغي",
 } as const

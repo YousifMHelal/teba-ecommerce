@@ -120,13 +120,17 @@ export default function ProfileForm({
         <div className="space-y-1.5">
           <Label htmlFor="name">الاسم الكامل</Label>
           <Input id="name" {...register("name", { required: "الاسم مطلوب" })} />
-          {errors.name && <p className="text-destructive text-xs">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="text-destructive text-xs">{errors.name.message}</p>
+          )}
         </div>
 
         <div className="space-y-1.5">
           <Label>البريد الإلكتروني</Label>
           <Input value={user.email ?? ""} disabled className="opacity-60" />
-          <p className="text-xs text-muted-foreground">لا يمكن تغيير البريد الإلكتروني</p>
+          <p className="text-xs text-muted-foreground">
+            لا يمكن تغيير البريد الإلكتروني
+          </p>
         </div>
 
         <div className="space-y-2">
@@ -155,10 +159,10 @@ export default function ProfileForm({
                   accept="image/*"
                   className="hidden"
                   onChange={(e) => {
-                    const file = e.target.files?.[0]
-                    if (!file) return
-                    void handleImageUpload(file)
-                    e.currentTarget.value = ""
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    void handleImageUpload(file);
+                    e.currentTarget.value = "";
                   }}
                   disabled={isUploading}
                 />
@@ -168,9 +172,8 @@ export default function ProfileForm({
                   variant="outline"
                   disabled={isUploading}
                   onClick={() => {
-                    document.getElementById("imageFile")?.click()
-                  }}
-                >
+                    document.getElementById("imageFile")?.click();
+                  }}>
                   <ImagePlus className="size-4" />
                   {imageUrl ? "تغيير الصورة" : "اختيار صورة"}
                 </Button>
@@ -180,8 +183,7 @@ export default function ProfileForm({
                     type="button"
                     variant="ghost"
                     disabled={isUploading}
-                    onClick={() => setImageUrl("")}
-                  >
+                    onClick={() => setImageUrl("")}>
                     <Trash2 className="size-4" />
                     إزالة
                   </Button>
@@ -199,15 +201,19 @@ export default function ProfileForm({
         </div>
 
         {message && (
-          <p className={`text-sm ${message.type === "success" ? "text-green-600" : "text-destructive"}`}>
+          <p
+            className={`text-sm ${message.type === "success" ? "text-green-600" : "text-destructive"}`}>
             {message.text}
           </p>
         )}
 
-        <Button type="submit" disabled={isLoading || isUploading}>
+        <Button
+          className="cursor-pointer"
+          type="submit"
+          disabled={isLoading || isUploading}>
           {isLoading ? "جاري الحفظ..." : "حفظ التغييرات"}
         </Button>
       </form>
     </div>
-  )
+  );
 }

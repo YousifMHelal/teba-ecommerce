@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF2D9B;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#CC0066;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" fill="url(#grad3)"/>
+  <!-- Perfume bottle -->
+  <rect x="80" y="50" width="40" height="70" rx="4" fill="none" stroke="#FF2D9B" stroke-width="2.5"/>
+  <path d="M 85 50 L 85 40 Q 85 35 90 35 L 110 35 Q 115 35 115 40 L 115 50" fill="none" stroke="#FF2D9B" stroke-width="2.5"/>
+  <circle cx="100" cy="38" r="3" fill="#FF2D9B"/>
+  <rect x="80" y="120" width="40" height="8" rx="2" fill="#FF2D9B" opacity="0.2"/>
+  <circle cx="95" cy="95" r="5" fill="#FF2D9B" opacity="0.3"/>
+  <circle cx="110" cy="90" r="4" fill="#FF2D9B" opacity="0.2"/>
+</svg>

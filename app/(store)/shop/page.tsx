@@ -29,6 +29,13 @@ export const metadata = {
 export default async function ShopPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const page = Number(params.page) || 1;
+  const filtersKey = [
+    params.search ?? "",
+    params.category ?? "",
+    params.sort ?? "",
+    params.minPrice ?? "",
+    params.maxPrice ?? "",
+  ].join("|");
 
   const [{ products, total, pages }, categories] = await Promise.all([
     getProducts({
@@ -50,7 +57,7 @@ export default async function ShopPage({ searchParams }: PageProps) {
           <p className="text-muted-foreground text-sm mt-0.5">{total} منتج</p>
         </div>
         <Suspense fallback={<Skeleton className="h-10 w-72" />}>
-          <ProductFilters categories={categories} />
+          <ProductFilters key={filtersKey} categories={categories} />
         </Suspense>
       </div>
 

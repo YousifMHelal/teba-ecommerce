@@ -1,5 +1,7 @@
 "use server"
 
+import { randomUUID } from "crypto"
+
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { auth } from "@/lib/auth"
@@ -15,6 +17,7 @@ export async function getProducts(filters: ProductFiltersType = {}) {
     maxPrice,
     sort = "createdAt_desc",
     page = 1,
+    includeInactive = false,
   } = filters
 
   const sortMap = {
@@ -29,7 +32,7 @@ export async function getProducts(filters: ProductFiltersType = {}) {
   const orderBy = sortMap[sort as keyof typeof sortMap] ?? sortMap.createdAt_desc
 
   const where = {
-    isActive: true,
+    ...(includeInactive ? {} : { isActive: true }),
     ...(categorySlug && { category: { slug: categorySlug } }),
     ...(search
       ? {
@@ -107,12 +110,50 @@ export async function getFeaturedProducts() {
   })
 }
 
+export async function getHomepageFeaturedProductSlots() {
+  return prisma.$queryRaw<Array<{
+    id: string
+    position: number
+    productId: string
+  }>>`
+    SELECT id, "position", "productId"
+    FROM "HomepageFeaturedProduct"
+    ORDER BY "position" ASC
+  `
+}
+
+export async function getHomepageFeaturedProducts() {
+  const featured = await getHomepageFeaturedProductSlots()
+
+  if (featured.length > 0) {
+    const featuredIds = featured.map((entry) => entry.productId)
+    const products = await prisma.product.findMany({
+      where: {
+        id: { in: featuredIds },
+        isActive: true,
+      },
+      include: { category: true },
+    })
+
+    return featuredIds
+      .map((productId) => products.find((product) => product.id === productId))
+      .filter((product): product is (typeof products)[number] => Boolean(product))
+  }
+
+  return prisma.product.findMany({
+    where: { isActive: true },
+    include: { category: true },
+    orderBy: { createdAt: "desc" },
+    take: 4,
+  })
+}
+
 export async function createProduct(data: {
   name: string
   description: string
   price: number
   comparePrice?: number
-  images: string[]
+  images?: string[]
   stock: number
   categoryId: string
   variants?: { name: string; value: string; priceAdjustment: number; stock: number }[]
@@ -120,7 +161,32 @@ export async function createProduct(data: {
   const session = await auth()
   if (session?.user.role !== "ADMIN") throw new Error("غير مصرح")
 
+  // Validate required fields
+  if (!data.name || typeof data.name !== "string") {
+    throw new Error("اسم المنتج مطلوب وجب أن يكون نصاً صحيحاً")
+  }
+  if (data.description && typeof data.description !== "string") {
+    throw new Error("الوصف يجب أن يكون نصاً صحيحاً")
+  }
+  if (typeof data.price !== "number" || data.price <= 0) {
+    throw new Error("السعر مطلوب وجب أن يكون رقماً موجباً")
+  }
+  if (!data.categoryId || typeof data.categoryId !== "string") {
+    throw new Error("الفئة مطلوبة")
+  }
+  if (data.images && data.images.some((img) => !img || typeof img !== "string")) {
+    throw new Error("جميع الصور يجب أن تحتوي على روابط صحيحة")
+  }
+  if (typeof data.stock !== "number" || data.stock < 0) {
+    throw new Error("المخزون يجب أن يكون رقماً موجباً أو صفر")
+  }
+
   const slug = slugify(data.name, { lower: true, strict: true })
+
+  if (!slug || typeof slug !== "string" || slug.trim().length === 0) {
+    throw new Error("فشل إنشاء معرّف فريد للمنتج من الاسم المعطى")
+  }
+
   const { variants, ...productData } = data
 
   const product = await prisma.product.create({
@@ -187,6 +253,62 @@ export async function deleteProduct(id: string) {
   revalidatePath("/admin/products")
   revalidatePath("/shop")
   return { success: true }
+}
+
+export async function saveHomepageFeaturedProducts(
+  _: { success: boolean; message: string | null },
+  formData: FormData
+) {
+  const session = await auth()
+  if (session?.user?.role !== "ADMIN") {
+    return { success: false, message: "غير مصرح" }
+  }
+
+  const productIds = [1, 2, 3, 4]
+    .map((slot) => String(formData.get(`product-${slot}`) ?? "").trim())
+    .filter(Boolean)
+
+  const uniqueIds = [...new Set(productIds)]
+
+  if (uniqueIds.length !== 4) {
+    return {
+      success: false,
+      message: "يجب اختيار 4 منتجات مختلفة للصفحة الرئيسية",
+    }
+  }
+
+  const products = await prisma.product.findMany({
+    where: {
+      id: { in: uniqueIds },
+      isActive: true,
+    },
+    select: { id: true },
+  })
+
+  if (products.length !== 4) {
+    return {
+      success: false,
+      message: "كل المنتجات المختارة يجب أن تكون منشورة وموجودة",
+    }
+  }
+
+  const now = new Date()
+
+  await prisma.$transaction(async (tx) => {
+    await tx.$executeRaw`DELETE FROM "HomepageFeaturedProduct"`
+
+    for (const [index, productId] of uniqueIds.entries()) {
+      await tx.$executeRaw`
+        INSERT INTO "HomepageFeaturedProduct" ("id", "position", "productId", "createdAt", "updatedAt")
+        VALUES (${randomUUID()}, ${index + 1}, ${productId}, ${now}, ${now})
+      `
+    }
+  })
+
+  revalidatePath("/")
+  revalidatePath("/admin/homepage")
+
+  return { success: true, message: "تم حفظ المنتجات المميزة بنجاح" }
 }
 
 async function syncProductToAlgolia(product: {

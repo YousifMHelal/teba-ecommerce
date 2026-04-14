@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import ProductCard from "@/components/product/ProductCard";
-import { getProductsAction } from "@/lib/actions/product.actions";
+import { getHomepageFeaturedProducts } from "@/lib/actions/product.actions";
 import type { ProductCardType } from "@/types";
 
 type ProductItem = {
@@ -36,14 +36,8 @@ export default async function FeaturedProducts() {
   let failedToLoad = false;
 
   try {
-    const getProducts = getProductsAction as unknown as (params?: {
-      limit?: number;
-    }) => Promise<ProductItem[] | { products?: ProductItem[] }>;
-    const result = await getProducts({ limit: 4 });
-    const fetchedProducts = Array.isArray(result)
-      ? result
-      : (result.products ?? []);
-    products = fetchedProducts.slice(0, 4);
+    const result = await getHomepageFeaturedProducts();
+    products = result.slice(0, 4);
   } catch {
     failedToLoad = true;
   }

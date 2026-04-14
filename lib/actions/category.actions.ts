@@ -5,8 +5,16 @@ import { revalidatePath } from "next/cache"
 import { auth } from "@/lib/auth"
 import slugify from "slugify"
 
-export async function getCategories() {
+export async function getCategories(search = "") {
   return prisma.category.findMany({
+    where: search
+      ? {
+        name: {
+          contains: search,
+          mode: "insensitive",
+        },
+      }
+      : undefined,
     orderBy: { name: "asc" },
     include: { _count: { select: { products: true } } },
   })

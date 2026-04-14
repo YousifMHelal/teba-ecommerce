@@ -1,30 +1,87 @@
-import Link from "next/link"
+"use client";
 
-import { buttonVariants } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { adminLinks } from "@/lib/constants"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
+import {
+  LayoutDashboard,
+  LogOut,
+  Package,
+  Settings,
+  ShoppingBag,
+  Sparkles,
+  Store,
+  Tag,
+  Users,
+} from "lucide-react";
+
+import { APP_NAME } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+
+const navItems = [
+  { href: "/admin", label: "الرئيسية", icon: LayoutDashboard, exact: true },
+  { href: "/admin/orders", label: "الطلبات", icon: ShoppingBag },
+  { href: "/admin/products", label: "المنتجات", icon: Package },
+  { href: "/admin/categories", label: "الفئات", icon: Tag },
+  { href: "/admin/homepage", label: "المنتاجات المميزة", icon: Sparkles },
+  { href: "/admin/users", label: "المستخدمون", icon: Users },
+  { href: "/admin/settings", label: "الإعدادات", icon: Settings },
+] as const;
 
 export function AdminSidebar() {
+  const pathname = usePathname();
+
+  const isActive = (href: string, exact = false) =>
+    exact ? pathname === href : pathname.startsWith(href);
+
   return (
-    <aside className="rounded-[1.5rem] border border-black/5 bg-white/90 p-4 shadow-sm">
-      <div className="space-y-4">
-        <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-zinc-500">Admin</p>
-          <h2 className="mt-2 text-xl font-semibold text-zinc-950">Teba dashboard</h2>
-        </div>
-        <Separator />
-        <div className="flex flex-col gap-2">
-          {adminLinks.map((link) => (
+    <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-e bg-background overflow-y-auto">
+      <div className="flex h-16 items-center border-b px-5 shrink-0">
+        <Link href="/admin" className="flex items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
+            <Store className="h-4 w-4 text-primary-foreground" />
+          </div>
+          <span className="text-sm font-bold">{APP_NAME} - Admin</span>
+        </Link>
+      </div>
+
+      <nav className="flex-1 space-y-1 p-3">
+        {navItems.map((item) => {
+          const { href, label, icon: Icon } = item;
+          const exact = "exact" in item ? item.exact : false;
+
+          return (
             <Link
-              key={link.href}
-              href={link.href}
-              className={buttonVariants({ variant: "ghost", className: "justify-start rounded-xl" })}
-            >
-              {link.label}
+              key={href}
+              href={href}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                isActive(href, exact)
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}>
+              <Icon className="h-4 w-4 shrink-0" />
+              {label}
             </Link>
-          ))}
-        </div>
+          );
+        })}
+      </nav>
+
+      <div className="space-y-1 border-t p-3">
+        <Link
+          href="/"
+          className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+          <Store className="h-4 w-4 shrink-0" />
+          عرض المتجر
+        </Link>
+        <button
+          type="button"
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive">
+          <LogOut className="h-4 w-4 shrink-0" />
+          تسجيل الخروج
+        </button>
       </div>
     </aside>
-  )
+  );
 }
