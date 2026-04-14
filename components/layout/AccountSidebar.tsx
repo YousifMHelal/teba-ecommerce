@@ -11,9 +11,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/account/profile", label: "الملف الشخصي", icon: User },
-  { href: "/account/orders", label: "طلباتي", icon: Package },
-  { href: "/account/addresses", label: "عناويني", icon: MapPin },
+  { href: "/profile", label: "الملف الشخصي", icon: User },
+  { href: "/orders", label: "طلباتي", icon: Package },
+  { href: "/addresses", label: "عناويني", icon: MapPin },
 ];
 
 type Props = {

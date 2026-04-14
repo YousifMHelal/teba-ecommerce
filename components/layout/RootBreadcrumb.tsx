@@ -7,7 +7,11 @@ import { AppBreadcrumb } from "@/components/layout/AppBreadcrumb";
 export function RootBreadcrumb() {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/account")) {
+  if (
+    pathname.startsWith("/profile") ||
+    pathname.startsWith("/orders") ||
+    pathname.startsWith("/addresses")
+  ) {
     return null;
   }
 

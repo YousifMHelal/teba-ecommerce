@@ -84,7 +84,7 @@ export async function updateProfile(data: { name?: string; image?: string }) {
       where: { id: session.user.id },
       data: payload,
     })
-    revalidatePath("/account/profile")
+    revalidatePath("/profile")
     return { success: true }
   } catch {
     return { success: false, error: "حدث خطأ أثناء تحديث الملف الشخصي" }
@@ -173,7 +173,7 @@ export async function createAddress(data: {
       },
     })
 
-    revalidatePath("/account/addresses")
+    revalidatePath("/addresses")
     return { success: true, address }
   } catch {
     return { success: false, error: "حدث خطأ أثناء إضافة العنوان" }
@@ -211,7 +211,7 @@ export async function updateAddress(
       where: { id },
       data,
     })
-    revalidatePath("/account/addresses")
+    revalidatePath("/addresses")
     return { success: true, address }
   } catch {
     return { success: false, error: "حدث خطأ أثناء تحديث العنوان" }
@@ -233,7 +233,7 @@ export async function deleteAddress(id: string) {
       return { success: false, error: "العنوان غير موجود" }
     }
 
-    revalidatePath("/account/addresses")
+    revalidatePath("/addresses")
     return { success: true }
   } catch {
     return { success: false, error: "حدث خطأ أثناء حذف العنوان" }
@@ -266,7 +266,7 @@ export async function setDefaultAddress(id: string) {
         data: { isDefault: true },
       }),
     ])
-    revalidatePath("/account/addresses")
+    revalidatePath("/addresses")
     return { success: true }
   } catch {
     return { success: false, error: "حدث خطأ" }

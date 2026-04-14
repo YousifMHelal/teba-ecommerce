@@ -58,10 +58,18 @@ export function SalesChart({ data }: { data: DataPoint[] }) {
               borderRadius: 8,
               fontSize: 12,
             }}
-            formatter={(value: number, name: string) => [
-              name === "revenue" ? formatPrice(value) : value,
-              name === "revenue" ? "الإيرادات" : "الطلبات",
-            ]}
+            formatter={(value, name) => {
+              const seriesName = String(name);
+              const numericValue =
+                typeof value === "number" ? value : Number(value ?? 0);
+
+              return [
+                seriesName === "revenue"
+                  ? formatPrice(numericValue)
+                  : numericValue,
+                seriesName === "revenue" ? "الإيرادات" : "الطلبات",
+              ];
+            }}
           />
           <Legend
             formatter={(value) =>

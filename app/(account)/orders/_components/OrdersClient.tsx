@@ -153,7 +153,7 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
           filteredOrders.map((order) => (
             <Link
               key={order.id}
-              href={`/account/orders/${order.id}`}
+              href={`/orders/${order.id}`}
               className="block rounded-xl border bg-background p-4 transition-all hover:border-primary/50 hover:shadow-sm">
               <div className="flex items-start justify-between gap-4">
                 <div className="space-y-1">

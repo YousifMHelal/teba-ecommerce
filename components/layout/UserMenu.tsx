@@ -160,7 +160,7 @@ export function UserMenu() {
         <DropdownMenuItem
           render={
             <Link
-              href="/account/profile"
+              href="/profile"
               className="flex w-full items-center justify-start cursor-pointer gap-2 rounded-md px-1.5 py-1 text-right text-sm outline-none select-none"
             />
           }>
@@ -171,7 +171,7 @@ export function UserMenu() {
         <DropdownMenuItem
           render={
             <Link
-              href="/account/orders"
+              href="/orders"
               className="flex w-full items-center justify-start cursor-pointer gap-2 rounded-md px-1.5 py-1 text-right text-sm outline-none select-none"
             />
           }>

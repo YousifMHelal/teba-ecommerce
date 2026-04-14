@@ -55,7 +55,7 @@ export default function CancelDeleteOrderButton({ orderId }: CancelDeleteOrderBu
     toast.success("تم حذف الطلب بنجاح", { id: toastId });
     setIsDialogOpen(false);
     resetState();
-    router.push("/account/orders");
+    router.push("/orders");
     router.refresh();
   };
 

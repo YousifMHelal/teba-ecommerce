@@ -72,9 +72,7 @@ export default async function OrderSuccessPage({ searchParams }: PageProps) {
       )}
 
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <Link
-          href="/account/orders"
-          className={cn(buttonVariants(), "inline-flex")}>
+        <Link href="/orders" className={cn(buttonVariants(), "inline-flex")}>
           متابعة طلباتي
         </Link>
         <Link

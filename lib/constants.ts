@@ -80,9 +80,9 @@ export const navigationLinks = [
 ] as const
 
 export const accountLinks = [
-  { href: "/account/profile", label: "الملف الشخصي" },
-  { href: "/account/orders", label: "الطلبات" },
-  { href: "/account/addresses", label: "العناوين" },
+  { href: "/profile", label: "الملف الشخصي" },
+  { href: "/orders", label: "الطلبات" },
+  { href: "/addresses", label: "العناوين" },
 ] as const
 
 export const adminLinks = [

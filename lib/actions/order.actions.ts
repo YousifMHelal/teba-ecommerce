@@ -114,7 +114,7 @@ export async function createOrder(
       return newOrder
     })
 
-    revalidatePath("/account/orders")
+    revalidatePath("/orders")
     revalidatePath("/admin/orders")
 
     return { success: true, orderId: order.id }
@@ -178,7 +178,7 @@ export async function updateOrderStatus(
 
   revalidatePath(`/admin/orders/${id}`)
   revalidatePath("/admin/orders")
-  revalidatePath(`/account/orders/${id}`)
+  revalidatePath(`/orders/${id}`)
   return order
 }
 
@@ -237,8 +237,8 @@ export async function cancelAndDeleteMyOrder(id: string) {
       await tx.order.delete({ where: { id } })
     })
 
-    revalidatePath("/account/orders")
-    revalidatePath(`/account/orders/${id}`)
+    revalidatePath("/orders")
+    revalidatePath(`/orders/${id}`)
     revalidatePath("/admin/orders")
     revalidatePath(`/admin/orders/${id}`)
 

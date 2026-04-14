@@ -9,33 +9,62 @@ import {
   Stats,
 } from "react-instantsearch"
 import { searchClient, ALGOLIA_INDEX } from "@/lib/algolia"
-import Link from "next/link"
-import Image from "next/image"
-import { formatPrice } from "@/lib/utils"
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { formatPrice } from "@/lib/utils";
 
 function ProductHit({ hit }: { hit: any }) {
   return (
     <Link
       href={`/shop/${hit.slug}`}
-      className="flex gap-3 p-3 rounded-lg border hover:shadow-sm transition-shadow bg-background"
-    >
+      className="flex gap-3 p-3 rounded-lg border hover:shadow-sm transition-shadow bg-background">
       <div className="relative h-20 w-20 shrink-0 rounded-lg overflow-hidden bg-muted">
         {hit.image && (
-          <Image src={hit.image} alt={hit.name} fill unoptimized className="object-cover" />
+          <Image
+            src={hit.image}
+            alt={hit.name}
+            fill
+            unoptimized
+            className="object-cover"
+          />
         )}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-xs text-muted-foreground mb-0.5">{hit.categoryName}</p>
-        <h3 className="font-medium text-sm leading-snug line-clamp-2">{hit.name}</h3>
+        <p className="text-xs text-muted-foreground mb-0.5">
+          {hit.categoryName}
+        </p>
+        <h3 className="font-medium text-sm leading-snug line-clamp-2">
+          {hit.name}
+        </h3>
         <p className="text-sm font-bold mt-1">{formatPrice(hit.price)}</p>
       </div>
     </Link>
-  )
+  );
 }
 
 export default function SearchPageClient() {
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("q")?.trim() ?? "";
+
+  if (!ALGOLIA_INDEX) {
+    return (
+      <p className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
+        إعدادات البحث غير مكتملة. أضف قيمة ALGOLIA_INDEX_NAME أو
+        NEXT_PUBLIC_ALGOLIA_INDEX_NAME في ملف البيئة.
+      </p>
+    );
+  }
+
   return (
-    <InstantSearch searchClient={searchClient} indexName={ALGOLIA_INDEX}>
+    <InstantSearch
+      searchClient={searchClient}
+      indexName={ALGOLIA_INDEX}
+      initialUiState={{
+        [ALGOLIA_INDEX]: {
+          query: initialQuery,
+        },
+      }}>
       <Configure hitsPerPage={12} />
 
       <SearchBox
@@ -72,7 +101,7 @@ export default function SearchPageClient() {
             }}
             translations={{
               rootElementText({ nbHits, processingTimeMS }) {
-                return `${nbHits} نتيجة (${processingTimeMS} مللي ثانية)`
+                return `${nbHits} نتيجة (${processingTimeMS} مللي ثانية)`;
               },
             }}
           />
@@ -87,5 +116,5 @@ export default function SearchPageClient() {
         </div>
       </div>
     </InstantSearch>
-  )
+  );
 }

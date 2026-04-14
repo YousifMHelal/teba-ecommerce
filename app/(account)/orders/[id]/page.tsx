@@ -70,7 +70,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
     <div className="space-y-6 max-w-2xl">
       <div>
         <Link
-          href="/account/orders"
+          href="/orders"
           className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 transition-colors">
           <ChevronRight className="h-4 w-4" />
           العودة إلى الطلبات

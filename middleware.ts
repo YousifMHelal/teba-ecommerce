@@ -7,7 +7,7 @@ export default auth((req) => {
   const isAdmin = session?.user?.role === "ADMIN"
 
   const isAccountRoute =
-    nextUrl.pathname.startsWith("/account") || nextUrl.pathname.startsWith("/checkout")
+    nextUrl.pathname.startsWith("/profile") || nextUrl.pathname.startsWith("/orders") || nextUrl.pathname.startsWith("/addresses") || nextUrl.pathname.startsWith("/checkout")
   const isAdminRoute = nextUrl.pathname.startsWith("/admin")
   const isAuthRoute = nextUrl.pathname.startsWith("/login") || nextUrl.pathname.startsWith("/register")
 
@@ -33,7 +33,7 @@ export default auth((req) => {
 
 export const config = {
   matcher: [
-    "/account/:path*",
+    "/:path*",
     "/checkout/:path*",
     "/admin/:path*",
     "/login",
