@@ -10,7 +10,8 @@ export function RootBreadcrumb() {
   if (
     pathname.startsWith("/profile") ||
     pathname.startsWith("/orders") ||
-    pathname.startsWith("/addresses")
+    pathname.startsWith("/addresses") ||
+    pathname.startsWith("/categories/")
   ) {
     return null;
   }

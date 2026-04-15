@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Address } from "@prisma/client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -62,6 +62,18 @@ export default function AddressesClient({
 }) {
   const [addresses, setAddresses] = useState(initialAddresses)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  // Hide body overflow when dialog is open to prevent background scrollbar
+  useEffect(() => {
+    if (isDialogOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isDialogOpen]);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
@@ -141,7 +153,9 @@ export default function AddressesClient({
       {addresses.length === 0 ? (
         <div className="text-center py-12 rounded-xl border border-dashed">
           <MapPin className="h-12 w-12 text-muted-foreground/30 mx-auto mb-3" />
-          <p className="text-sm text-muted-foreground mb-4">لم تضف أي عناوين بعد</p>
+          <p className="text-sm text-muted-foreground mb-4">
+            لم تضف أي عناوين بعد
+          </p>
           <Button onClick={openAddDialog} size="sm">
             <Plus className="h-4 w-4 me-1.5" />
             إضافة عنوان
@@ -154,11 +168,14 @@ export default function AddressesClient({
               <div
                 key={address.id}
                 className={`rounded-xl border p-4 space-y-2 relative ${
-                  address.isDefault ? "border-primary bg-primary/5" : "bg-background"
-                }`}
-              >
+                  address.isDefault
+                    ? "border-primary bg-primary/5"
+                    : "bg-background"
+                }`}>
                 {address.isDefault && (
-                  <Badge className="absolute top-3 inset-e-3 text-xs">افتراضي</Badge>
+                  <Badge className="absolute top-3 inset-e-3 text-xs">
+                    افتراضي
+                  </Badge>
                 )}
 
                 <p className="font-medium text-sm">{address.fullName}</p>
@@ -176,8 +193,7 @@ export default function AddressesClient({
                       variant="ghost"
                       size="sm"
                       className="h-7 text-xs gap-1"
-                      onClick={() => handleSetDefault(address.id)}
-                    >
+                      onClick={() => handleSetDefault(address.id)}>
                       <Star className="h-3 w-3" />
                       تعيين افتراضي
                     </Button>
@@ -186,16 +202,14 @@ export default function AddressesClient({
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 ms-auto"
-                    onClick={() => openEditDialog(address)}
-                  >
+                    onClick={() => openEditDialog(address)}>
                     <Pencil className="h-3.5 w-3.5" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
                     className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                    onClick={() => handleDelete(address.id)}
-                  >
+                    onClick={() => handleDelete(address.id)}>
                     <Trash2 className="h-3.5 w-3.5" />
                   </Button>
                 </div>
@@ -211,41 +225,71 @@ export default function AddressesClient({
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-sm md:max-w-xl lg:max-w-2xl p-5 sm:p-6 max-h-[calc(100vh-2rem)] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingAddress ? "تعديل العنوان" : "إضافة عنوان جديد"}</DialogTitle>
+            <DialogTitle>
+              {editingAddress ? "تعديل العنوان" : "إضافة عنوان جديد"}
+            </DialogTitle>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3" noValidate>
-            <div className="grid grid-cols-2 gap-3">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-4"
+            noValidate>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="fullName">الاسم الكامل</Label>
-                <Input id="fullName" {...register("fullName")} />
+                <Input
+                  id="fullName"
+                  placeholder="مثال: محمد أحمد"
+                  className="h-11"
+                  {...register("fullName")}
+                />
                 {errors.fullName && (
-                  <p className="text-destructive text-xs">{errors.fullName.message}</p>
+                  <p className="text-destructive text-xs">
+                    {errors.fullName.message}
+                  </p>
                 )}
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="phone">رقم الهاتف</Label>
-                <Input id="phone" dir="ltr" {...register("phone")} />
-                {errors.phone && <p className="text-destructive text-xs">{errors.phone.message}</p>}
+                <Input
+                  id="phone"
+                  placeholder="مثال: 01012345678"
+                  dir="ltr"
+                  className="h-11"
+                  {...register("phone")}
+                />
+                {errors.phone && (
+                  <p className="text-destructive text-xs">
+                    {errors.phone.message}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="street">العنوان</Label>
-              <Input id="street" {...register("street")} />
-              {errors.street && <p className="text-destructive text-xs">{errors.street.message}</p>}
+              <Input
+                id="street"
+                placeholder="مثال: شارع النيل، عمارة 5"
+                className="h-11"
+                {...register("street")}
+              />
+              {errors.street && (
+                <p className="text-destructive text-xs">
+                  {errors.street.message}
+                </p>
+              )}
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
               <div className="space-y-1.5">
                 <Label htmlFor="state">المحافظة</Label>
                 <select
                   id="state"
-                  className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                  {...register("state")}
-                >
+                  className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  {...register("state")}>
                   <option value="">اختر</option>
                   {EGYPT_GOVERNORATES.map((g) => (
                     <option key={g} value={g}>
@@ -253,27 +297,44 @@ export default function AddressesClient({
                     </option>
                   ))}
                 </select>
-                {errors.state && <p className="text-destructive text-xs">{errors.state.message}</p>}
+                {errors.state && (
+                  <p className="text-destructive text-xs">
+                    {errors.state.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="city">المدينة</Label>
-                <Input id="city" {...register("city")} />
-                {errors.city && <p className="text-destructive text-xs">{errors.city.message}</p>}
+                <Input
+                  id="city"
+                  placeholder="مثال: القاهرة الجديدة"
+                  className="h-11"
+                  {...register("city")}
+                />
+                {errors.city && (
+                  <p className="text-destructive text-xs">
+                    {errors.city.message}
+                  </p>
+                )}
               </div>
             </div>
 
-            {error && <p className="text-destructive text-sm text-center">{error}</p>}
+            {error && (
+              <p className="text-destructive text-sm text-center">{error}</p>
+            )}
 
             <div className="flex gap-2 pt-2">
               <Button
                 type="button"
                 variant="outline"
-                className="flex-1"
-                onClick={() => setIsDialogOpen(false)}
-              >
+                className="h-11 flex-1"
+                onClick={() => setIsDialogOpen(false)}>
                 إلغاء
               </Button>
-              <Button type="submit" className="flex-1" disabled={isLoading}>
+              <Button
+                type="submit"
+                className="h-11 flex-1"
+                disabled={isLoading}>
                 {isLoading ? "جاري الحفظ..." : "حفظ"}
               </Button>
             </div>
@@ -281,5 +342,5 @@ export default function AddressesClient({
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -67,123 +67,128 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-lg items-center px-4 py-16">
-      <Card className="w-full border-border bg-card/95 shadow-lg backdrop-blur">
-        <CardHeader className="space-y-2 text-center">
-          <CardDescription className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            أهلاً بعودتك
-          </CardDescription>
-          <CardTitle className="text-3xl font-semibold text-foreground">
-            تسجيل الدخول
-          </CardTitle>
-          <CardDescription>ادخل إلى حسابك للمتابعة في طيبة</CardDescription>
-        </CardHeader>
+    <Suspense fallback={null}>
+      <main className="mx-auto flex min-h-screen w-full max-w-lg items-center px-4 py-16">
+        <Card className="w-full border-border bg-card/95 shadow-lg backdrop-blur">
+          <CardHeader className="space-y-2 text-center">
+            <CardDescription className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+              أهلاً بعودتك
+            </CardDescription>
+            <CardTitle className="text-3xl font-semibold text-foreground">
+              تسجيل الدخول
+            </CardTitle>
+            <CardDescription>ادخل إلى حسابك للمتابعة في طيبة</CardDescription>
+          </CardHeader>
 
-        <CardContent className="space-y-5">
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full cursor-pointer gap-2 rounded-full border-primary/40 text-primary hover:bg-primary/10"
-              onClick={handleGoogleSignIn}
-              disabled={isGoogleLoading}>
-              <FaGoogle aria-hidden="true" className="size-4" />
-              {isGoogleLoading ? "جاري التحميل..." : "Google"}
-            </Button>
+          <CardContent className="space-y-5">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full cursor-pointer gap-2 rounded-full border-primary/40 text-primary hover:bg-primary/10"
+                onClick={handleGoogleSignIn}
+                disabled={isGoogleLoading}>
+                <FaGoogle aria-hidden="true" className="size-4" />
+                {isGoogleLoading ? "جاري التحميل..." : "Google"}
+              </Button>
 
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full cursor-pointer gap-2 rounded-full border-primary/40 text-primary hover:bg-primary/10"
-              onClick={() => signIn("facebook", { callbackUrl })}>
-              <FaFacebookF aria-hidden="true" className="size-4" />
-              Facebook
-            </Button>
-          </div>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full cursor-pointer gap-2 rounded-full border-primary/40 text-primary hover:bg-primary/10"
+                onClick={() => signIn("facebook", { callbackUrl })}>
+                <FaFacebookF aria-hidden="true" className="size-4" />
+                Facebook
+              </Button>
+            </div>
 
-          <div className="relative">
-            <Separator />
-            <span className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center">
-              <span className="bg-card px-2 text-xs text-muted-foreground">
-                أو
+            <div className="relative">
+              <Separator />
+              <span className="absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center">
+                <span className="bg-card px-2 text-xs text-muted-foreground">
+                  أو
+                </span>
               </span>
-            </span>
-          </div>
-
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-4 mt-3"
-            noValidate>
-            {error ? (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                {error}
-              </div>
-            ) : null}
-
-            <div className="space-y-2">
-              <Label htmlFor="email">البريد الإلكتروني</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="example@email.com"
-                dir="ltr"
-                {...register("email")}
-              />
-              {errors.email ? (
-                <p className="text-xs text-red-600">{errors.email.message}</p>
-              ) : null}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">كلمة المرور</Label>
-              <div className="relative">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-4 mt-3"
+              noValidate>
+              {error ? (
+                <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {error}
+                </div>
+              ) : null}
+
+              <div className="space-y-2">
+                <Label htmlFor="email">البريد الإلكتروني</Label>
                 <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
+                  id="email"
+                  type="email"
+                  placeholder="example@email.com"
                   dir="ltr"
-                  className="pl-10"
-                  {...register("password")}
+                  {...register("email")}
                 />
-                <button
-                  type="button"
-                  aria-label={showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
-                  className="absolute inset-y-0 left-2 flex items-center text-muted-foreground hover:text-foreground cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}>
-                  {showPassword ? (
-                    <EyeOff className="size-4" aria-hidden="true" />
-                  ) : (
-                    <Eye className="size-4" aria-hidden="true" />
-                  )}
-                </button>
+                {errors.email ? (
+                  <p className="text-xs text-red-600">{errors.email.message}</p>
+                ) : null}
               </div>
-              {errors.password ? (
-                <p className="text-xs text-red-600">
-                  {errors.password.message}
-                </p>
-              ) : null}
-            </div>
 
-            <Button
-              type="submit"
-              className="w-full cursor-pointer rounded-full"
-              disabled={isLoading}>
-              {isLoading ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
-            </Button>
-          </form>
-        </CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="password">كلمة المرور</Label>
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    dir="ltr"
+                    className="pl-10"
+                    {...register("password")}
+                  />
+                  <button
+                    type="button"
+                    aria-label={
+                      showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"
+                    }
+                    className="absolute inset-y-0 left-2 flex items-center text-muted-foreground hover:text-foreground cursor-pointer"
+                    onClick={() => setShowPassword((prev) => !prev)}>
+                    {showPassword ? (
+                      <EyeOff className="size-4" aria-hidden="true" />
+                    ) : (
+                      <Eye className="size-4" aria-hidden="true" />
+                    )}
+                  </button>
+                </div>
+                {errors.password ? (
+                  <p className="text-xs text-red-600">
+                    {errors.password.message}
+                  </p>
+                ) : null}
+              </div>
 
-        <CardFooter className="justify-center pb-6">
-          <p className="text-sm text-muted-foreground">
-            ليس لديك حساب؟{" "}
-            <Link
-              href="/register"
-              className="font-medium text-primary hover:underline">
-              إنشاء حساب
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
-    </main>
+              <Button
+                type="submit"
+                className="w-full cursor-pointer rounded-full"
+                disabled={isLoading}>
+                {isLoading ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
+              </Button>
+            </form>
+          </CardContent>
+
+          <CardFooter className="justify-center pb-6">
+            <p className="text-sm text-muted-foreground">
+              ليس لديك حساب؟{" "}
+              <Link
+                href="/register"
+                className="font-medium text-primary hover:underline">
+                إنشاء حساب
+              </Link>
+            </p>
+          </CardFooter>
+        </Card>
+      </main>
+    </Suspense>
   );
 }
+

@@ -18,8 +18,10 @@ import { useDebounce } from "@/hooks/useDebounce";
 
 export default function ProductFilters({
   categories,
+  hideCategory = false,
 }: {
   categories: Category[];
+  hideCategory?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -92,24 +94,26 @@ export default function ProductFilters({
         />
       </div>
 
-      <div className="flex items-center gap-2">
-        <Label className="text-sm whitespace-nowrap">الفئة</Label>
-        <Select
-          value={currentCategory}
-          onValueChange={(v) => updateFilter("category", v ?? "all")}>
-          <SelectTrigger className="w-36 h-9">
-            <SelectValue>{currentCategoryLabel}</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">كل الفئات</SelectItem>
-            {categories.map((cat) => (
-              <SelectItem key={cat.id} value={cat.slug}>
-                {cat.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {!hideCategory && (
+        <div className="flex items-center gap-2">
+          <Label className="text-sm whitespace-nowrap">الفئة</Label>
+          <Select
+            value={currentCategory}
+            onValueChange={(v) => updateFilter("category", v ?? "all")}>
+            <SelectTrigger className="w-36 h-9">
+              <SelectValue>{currentCategoryLabel}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">كل الفئات</SelectItem>
+              {categories.map((cat) => (
+                <SelectItem key={cat.id} value={cat.slug}>
+                  {cat.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       <div className="flex items-center gap-2">
         <Label className="text-sm whitespace-nowrap">الترتيب</Label>

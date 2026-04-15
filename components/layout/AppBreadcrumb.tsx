@@ -25,9 +25,10 @@ const ROUTE_LABELS: Record<string, string> = {
   checkout: "الدفع",
   search: "البحث",
   shop: "المتجر",
+  about: "من نحن",
   login: "تسجيل الدخول",
   register: "إنشاء حساب",
-}
+};
 
 function formatSegment(segment: string) {
   const cleanSegment = decodeURIComponent(segment)
