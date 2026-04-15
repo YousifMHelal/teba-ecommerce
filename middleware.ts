@@ -1,28 +1,33 @@
-import { authEdge } from "@/lib/auth-edge"
+import { auth } from "@/lib/auth"
 import { NextResponse } from "next/server"
 
-export default authEdge((req) => {
+export default auth((req) => {
   const { nextUrl, auth: session } = req
 
   const isLoggedIn = !!session?.user
   const isAdmin = session?.user?.role === "ADMIN"
 
-  const pathname = nextUrl.pathname
+  const isAccountRoute =
+    nextUrl.pathname.startsWith("/profile") || nextUrl.pathname.startsWith("/orders") || nextUrl.pathname.startsWith("/addresses") || nextUrl.pathname.startsWith("/checkout")
+  const isAdminRoute = nextUrl.pathname.startsWith("/admin")
+  const isAuthRoute = nextUrl.pathname.startsWith("/login") || nextUrl.pathname.startsWith("/register")
 
-  if ((pathname === "/login" || pathname === "/register") && isLoggedIn) {
+  // Redirect authenticated users away from auth pages
+  if (isAuthRoute && isLoggedIn) {
     return NextResponse.redirect(new URL("/", nextUrl))
   }
 
-  if (
-    pathname.startsWith("/checkout") &&
-    !isLoggedIn
-  ) {
+  // Redirect unauthenticated users away from protected routes
+  if (isAccountRoute && !isLoggedIn) {
+
+
     return NextResponse.redirect(
-      new URL(`/login?callbackUrl=${pathname}`, nextUrl)
+      new URL(`/login?callbackUrl=${nextUrl.pathname}${nextUrl.search}`, nextUrl),
     )
   }
 
-  if (pathname.startsWith("/admin") && !isAdmin) {
+  // Redirect non-admin users away from admin routes
+  if (isAdminRoute && !isAdmin) {
     return NextResponse.redirect(new URL("/", nextUrl))
   }
 
@@ -30,5 +35,11 @@ export default authEdge((req) => {
 })
 
 export const config = {
-  matcher: ["/checkout/:path*", "/admin/:path*", "/login", "/register"],
+  matcher: [
+    "/:path*",
+    "/checkout/:path*",
+    "/admin/:path*",
+    "/login",
+    "/register",
+  ],
 }
