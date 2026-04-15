@@ -16,14 +16,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-
-const navLinks = [
-  { href: "/", label: "الرئيسية" },
-  { href: "/shop", label: "المتجر" },
-  { href: "/categories", label: "الفئات" },
-  { href: "/search", label: "البحث" },
-  { href: "/about", label: "من نحن" },
-] as const;
+import { NAV_LINKS } from "@/lib/constants";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -102,7 +95,7 @@ export function Navbar() {
                     الروابط الأساسية
                   </p>
                   <nav className="space-y-1">
-                    {navLinks.map((link) => {
+                    {NAV_LINKS.map((link) => {
                       const isActive = isActiveRoute(link.href);
 
                       return (
@@ -160,7 +153,7 @@ export function Navbar() {
         </div>
 
         <nav className="flex flex-1 items-center justify-center gap-1 font-(family-name:--font-cairo)">
-          {navLinks.map((link) => {
+          {NAV_LINKS.map((link) => {
             const isActive = isActiveRoute(link.href);
 
             return (

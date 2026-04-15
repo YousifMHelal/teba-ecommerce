@@ -1,58 +1,29 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Address } from "@prisma/client"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { MapPin, Pencil, Plus, Star, Trash2 } from "lucide-react"
+import { Address } from "@prisma/client";
+import { MapPin, Pencil, Plus, Star, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   createAddress,
   deleteAddress,
   setDefaultAddress,
   updateAddress,
-} from "@/lib/actions/user.actions"
-import { addressSchema, AddressInput } from "@/lib/validations"
-
-const EGYPT_GOVERNORATES = [
-  "القاهرة",
-  "القليوبية",
-  "الجيزة",
-  "الإسكندرية",
-  "الدقهلية",
-  "البحر الأحمر",
-  "البحيرة",
-  "الفيوم",
-  "الغربية",
-  "الإسماعيلية",
-  "المنوفية",
-  "المنيا",
-  "الوادي الجديد",
-  "السويس",
-  "أسوان",
-  "أسيوط",
-  "بني سويف",
-  "بورسعيد",
-  "دمياط",
-  "الشرقية",
-  "جنوب سيناء",
-  "كفر الشيخ",
-  "مطروح",
-  "الأقصر",
-  "قنا",
-  "شمال سيناء",
-  "سوهاج",
-];
+} from "@/lib/actions/user.actions";
+import { EGYPT_GOVERNORATES } from "@/lib/constants";
+import { AddressInput, addressSchema } from "@/lib/validations";
 
 
 export default function AddressesClient({

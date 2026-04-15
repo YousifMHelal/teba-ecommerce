@@ -79,4 +79,3 @@ export async function deleteCategory(id: string) {
 }
 
 export const getCategoriesAction = getCategories
-export const getCategoryBySlugAction = getCategoryBySlug

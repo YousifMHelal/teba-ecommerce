@@ -7,7 +7,11 @@ import { ChevronLeft, Filter, Package, Search, X } from "lucide-react";
 import ProductImageWithFallback from "@/components/product/ProductImageWithFallback";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ORDER_STATUS, PAYMENT_METHOD_LABELS } from "@/lib/constants";
+import {
+  ORDER_STATUS,
+  PAYMENT_METHOD_LABELS,
+  STATUS_COLORS,
+} from "@/lib/constants";
 import { cn, formatPrice } from "@/lib/utils";
 
 type Order = {
@@ -27,18 +31,6 @@ type Order = {
 
 type OrdersClientProps = {
   initialOrders: Order[];
-};
-
-const statusColors: Record<string, string> = {
-  PENDING:
-    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-  PROCESSING:
-    "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-  SHIPPED:
-    "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-  DELIVERED:
-    "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-  CANCELLED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
 };
 
 export default function OrdersClient({ initialOrders }: OrdersClientProps) {
@@ -130,7 +122,11 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
             ))}
           </select>
 
-          <Button type="button" variant="outline" className="h-10 gap-2" onClick={clearFilters}>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-10 gap-2"
+            onClick={clearFilters}>
             <Filter className="size-4" />
             تصفية
           </Button>
@@ -145,7 +141,11 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
             <p className="mt-1 text-sm text-muted-foreground">
               جرّب تغيير البحث أو الفلاتر الحالية
             </p>
-            <Button type="button" variant="ghost" className="mt-4" onClick={clearFilters}>
+            <Button
+              type="button"
+              variant="ghost"
+              className="mt-4"
+              onClick={clearFilters}>
               إعادة ضبط الفلاتر
             </Button>
           </div>
@@ -164,7 +164,7 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
                     <span
                       className={cn(
                         "rounded-full px-2 py-0.5 text-xs font-medium",
-                        statusColors[order.status],
+                        STATUS_COLORS[order.status],
                       )}>
                       {ORDER_STATUS[order.status]}
                     </span>
@@ -178,12 +178,15 @@ export default function OrdersClient({ initialOrders }: OrdersClientProps) {
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {PAYMENT_METHOD_LABELS[order.paymentMethod]} ·{" "}
-                    {order.items.reduce((sum, item) => sum + item.quantity, 0)} منتجات
+                    {order.items.reduce((sum, item) => sum + item.quantity, 0)}{" "}
+                    منتجات
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-bold">{formatPrice(order.total)}</p>
+                  <p className="text-sm font-bold">
+                    {formatPrice(order.total)}
+                  </p>
                   <ChevronLeft className="size-4 text-muted-foreground" />
                 </div>
               </div>

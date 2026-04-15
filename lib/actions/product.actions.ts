@@ -383,8 +383,6 @@ export async function syncAllProductsToAlgolia() {
   return { synced: products.length }
 }
 
-export const getProductBySlugAction = getProductBySlug
-
 export async function getProductsAction(params?: { limit?: number }) {
   if (params?.limit) {
     return prisma.product.findMany({

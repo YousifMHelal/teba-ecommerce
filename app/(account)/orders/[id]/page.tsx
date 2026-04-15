@@ -1,9 +1,9 @@
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight } from "lucide-react";
 
-import { buttonVariants } from "@/components/ui/button";
 import ProductImageWithFallback from "@/components/product/ProductImageWithFallback";
+import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getOrderById } from "@/lib/actions/order.actions";
 import {
@@ -12,6 +12,8 @@ import {
   PAYMENT_STATUS,
   SHIPPING_COST,
   SHIPPING_THRESHOLD,
+  STATUS_COLORS,
+  PAYMENT_STATUS_COLORS,
 } from "@/lib/constants";
 import { cn, formatPrice } from "@/lib/utils";
 
@@ -36,23 +38,6 @@ export async function generateMetadata({ params }: PageProps) {
   return { title: `طلب #${id.slice(-8).toUpperCase()}` };
 }
 
-const statusColors: Record<string, string> = {
-  PENDING:
-    "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-  PROCESSING:
-    "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-  SHIPPED:
-    "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-  DELIVERED:
-    "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-  CANCELLED: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-};
-
-const paymentStatusColors: Record<string, string> = {
-  UNPAID: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-  PAID: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-  REFUNDED: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400",
-};
 
 const statusSteps = ["PENDING", "PROCESSING", "SHIPPED", "DELIVERED"];
 
@@ -92,7 +77,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
           </div>
           <span
             className={`text-xs font-medium px-3 py-1 rounded-full ${
-              statusColors[order.status]
+              STATUS_COLORS[order.status]
             }`}>
             {ORDER_STATUS[order.status]}
           </span>
@@ -233,7 +218,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
               <span className="text-muted-foreground">الحالة</span>
               <span
                 className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                  paymentStatusColors[order.paymentStatus]
+                  PAYMENT_STATUS_COLORS[order.paymentStatus]
                 }`}>
                 {PAYMENT_STATUS[order.paymentStatus]}
               </span>

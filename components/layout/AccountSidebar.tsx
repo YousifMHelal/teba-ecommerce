@@ -1,20 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { LogOut, ShieldCheck } from "lucide-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { User, Package, MapPin, LogOut, ShieldCheck } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { useState } from "react";
 
 import { AdminPinDialog } from "@/components/layout/AdminPinDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ACCOUNT_NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { href: "/profile", label: "الملف الشخصي", icon: User },
-  { href: "/orders", label: "طلباتي", icon: Package },
-  { href: "/addresses", label: "عناويني", icon: MapPin },
-];
 
 type Props = {
   user: {
@@ -50,7 +45,7 @@ export default function AccountSidebar({ user }: Props) {
       </div>
 
       <nav className="flex-1 space-y-1">
-        {navItems.map(({ href, label, icon: Icon }) => (
+        {ACCOUNT_NAV_LINKS.map(({ href, label, icon: Icon }) => (
           <Link
             key={href}
             href={href}

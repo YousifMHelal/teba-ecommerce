@@ -7,42 +7,13 @@ import { useRouter } from "next/navigation";
 import { checkoutSchema, CheckoutInput } from "@/lib/validations";
 import { createOrder } from "@/lib/actions/order.actions";
 import { useCart } from "@/hooks/useCart";
-import { PAYMENT_METHODS } from "@/lib/constants";
+import { PAYMENT_METHODS, EGYPT_GOVERNORATES } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-const EGYPT_GOVERNORATES = [
-  "القاهرة",
-  "القليوبية",
-  "الجيزة",
-  "الإسكندرية",
-  "الدقهلية",
-  "البحر الأحمر",
-  "البحيرة",
-  "الفيوم",
-  "الغربية",
-  "الإسماعيلية",
-  "المنوفية",
-  "المنيا",
-  "الوادي الجديد",
-  "السويس",
-  "أسوان",
-  "أسيوط",
-  "بني سويف",
-  "بورسعيد",
-  "دمياط",
-  "الشرقية",
-  "جنوب سيناء",
-  "كفر الشيخ",
-  "مطروح",
-  "الأقصر",
-  "قنا",
-  "شمال سيناء",
-  "سوهاج",
-];
 
 type CheckoutFormProps = {
   initialAddress?: {

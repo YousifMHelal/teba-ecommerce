@@ -15,18 +15,8 @@ import {
   Users,
 } from "lucide-react";
 
-import { APP_NAME } from "@/lib/constants";
+import { ADMIN_NAV_LINKS, APP_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { href: "/admin", label: "الرئيسية", icon: LayoutDashboard, exact: true },
-  { href: "/admin/orders", label: "الطلبات", icon: ShoppingBag },
-  { href: "/admin/products", label: "المنتجات", icon: Package },
-  { href: "/admin/categories", label: "الفئات", icon: Tag },
-  { href: "/admin/homepage", label: "المنتاجات المميزة", icon: Sparkles },
-  { href: "/admin/users", label: "المستخدمون", icon: Users },
-  { href: "/admin/settings", label: "الإعدادات", icon: Settings },
-] as const;
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -46,7 +36,7 @@ export function AdminSidebar() {
       </div>
 
       <nav className="flex-1 space-y-1 p-3">
-        {navItems.map((item) => {
+        {ADMIN_NAV_LINKS.map((item) => {
           const { href, label, icon: Icon } = item;
           const exact = "exact" in item ? item.exact : false;
 

@@ -89,7 +89,9 @@ export default function PromoBanner() {
           <span className="mb-3 inline-flex rounded-full border border-[#00BFFF]/30 bg-[#00BFFF]/10 px-3 py-1 text-xs text-[#00BFFF]">
             ⚡ عرض محدود
           </span>
-          <h2 className="mb-2 text-2xl font-medium text-white">اطلب بالجملة ووفّر أكثر</h2>
+          <h2 className="mb-2 text-2xl font-medium text-white">
+            اطلب بالجملة ووفّر أكثر
+          </h2>
           <p className="mb-6 text-sm text-white/70">
             خصم خاص على الطلبات فوق 50 جنيه - اتصل بنا لمعرفة أفضل سعر
           </p>
@@ -99,11 +101,13 @@ export default function PromoBanner() {
               className="rounded-lg bg-[#00BFFF] px-5 py-2.5 text-sm font-medium text-black">
               اطلب الآن
             </Link>
-            <Link
-              href="/contact"
+            <a
+              href="https://wa.me/201110292946?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%AA%D9%88%D8%A7%D8%B5%D9%84%20%D8%A8%D8%AE%D8%B5%D9%88%D8%B5%20%D8%A7%D9%84%D8%B7%D9%84%D8%A8%D8%A7%D8%AA"
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-lg border border-white/20 px-5 py-2.5 text-sm text-white">
               تواصل معنا
-            </Link>
+            </a>
           </div>
         </div>
 
@@ -115,11 +119,13 @@ export default function PromoBanner() {
               <p className="text-2xl font-medium text-[#00BFFF]">
                 {entry.value.toString().padStart(2, "0")}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">{entry.label}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {entry.label}
+              </p>
             </div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
