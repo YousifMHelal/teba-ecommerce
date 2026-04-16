@@ -50,113 +50,138 @@ export default async function ProductPage({ params }: PageProps) {
     ? calculateDiscount(product.price, product.comparePrice!)
     : 0;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.images[0],
+    offers: {
+      "@type": "Offer",
+      price: product.price,
+      priceCurrency: "EGP",
+      availability:
+        product.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+    },
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        <div className="space-y-3">
-          <div className="relative aspect-square rounded-xl overflow-hidden bg-muted">
-            <ProductImageWithFallback
-              src={mainImage}
-              alt={product.name}
-              priority
-              fallbackColorClass={fallbackColor}
-              iconClassName="h-12 w-12"
-              className="object-cover"
-            />
-            {hasDiscount && (
-              <Badge className="absolute top-3 inset-s-3 bg-destructive text-destructive-foreground text-sm px-2 py-1">
-                -{discount}%
-              </Badge>
-            )}
-          </div>
-          {galleryImages.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
-              {galleryImages.slice(1, 5).map((img, i) => (
-                <div
-                  key={i}
-                  className="relative aspect-square rounded-lg overflow-hidden bg-muted">
-                  <ProductImageWithFallback
-                    src={img}
-                    alt={`${product.name} ${i + 2}`}
-                    fallbackColorClass={fallbackColor}
-                    iconClassName="h-7 w-7"
-                    className="object-cover"
-                  />
-                </div>
-              ))}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="space-y-3">
+            <div className="relative aspect-square rounded-xl overflow-hidden bg-muted">
+              <ProductImageWithFallback
+                src={mainImage}
+                alt={product.name}
+                priority
+                fallbackColorClass={fallbackColor}
+                iconClassName="h-12 w-12"
+                className="object-cover"
+              />
+              {hasDiscount && (
+                <Badge className="absolute top-3 inset-s-3 bg-destructive text-destructive-foreground text-sm px-2 py-1">
+                  -{discount}%
+                </Badge>
+              )}
             </div>
-          )}
-        </div>
-
-        <div className="space-y-5">
-          <div>
-            <Badge variant="secondary" className="mb-2">
-              {product.category.name}
-            </Badge>
-            <h1 className="text-2xl font-bold leading-snug">{product.name}</h1>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <span className="text-3xl font-bold">
-              {formatPrice(product.price)}
-            </span>
-            {hasDiscount && (
-              <span className="text-xl text-muted-foreground line-through">
-                {formatPrice(product.comparePrice!)}
-              </span>
+            {galleryImages.length > 1 && (
+              <div className="grid grid-cols-4 gap-2">
+                {galleryImages.slice(1, 5).map((img, i) => (
+                  <div
+                    key={i}
+                    className="relative aspect-square rounded-lg overflow-hidden bg-muted">
+                    <ProductImageWithFallback
+                      src={img}
+                      alt={`${product.name} ${i + 2}`}
+                      fallbackColorClass={fallbackColor}
+                      iconClassName="h-7 w-7"
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
             )}
           </div>
 
-          {product.stock > 0 ? (
-            <Badge
-              variant="outline"
-              className="text-green-600 border-green-600">
-              متوفر في المخزون
-            </Badge>
-          ) : (
-            <Badge variant="destructive">نفذ المخزون</Badge>
-          )}
+          <div className="space-y-5">
+            <div>
+              <Badge variant="secondary" className="mb-2">
+                {product.category.name}
+              </Badge>
+              <h1 className="text-2xl font-bold leading-snug">
+                {product.name}
+              </h1>
+            </div>
 
-          <p className="text-muted-foreground leading-relaxed">
-            {product.description}
-          </p>
+            <div className="flex items-center gap-3">
+              <span className="text-3xl font-bold">
+                {formatPrice(product.price)}
+              </span>
+              {hasDiscount && (
+                <span className="text-xl text-muted-foreground line-through">
+                  {formatPrice(product.comparePrice!)}
+                </span>
+              )}
+            </div>
 
-          {product.variants.length > 0 && (
-            <ProductVariantSelector
-              variants={product.variants}
-              product={{
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                image: mainImage ?? "",
-                slug: product.slug,
-                stock: product.stock,
-              }}
-            />
-          )}
+            {product.stock > 0 ? (
+              <Badge
+                variant="outline"
+                className="text-green-600 border-green-600">
+                متوفر في المخزون
+              </Badge>
+            ) : (
+              <Badge variant="destructive">نفذ المخزون</Badge>
+            )}
 
-          {product.variants.length === 0 && product.stock > 0 && (
-            <ProductVariantSelector
-              variants={[]}
-              product={{
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                image: mainImage ?? "",
-                slug: product.slug,
-                stock: product.stock,
-              }}
-            />
-          )}
+            <p className="text-muted-foreground leading-relaxed">
+              {product.description}
+            </p>
+
+            {product.variants.length > 0 && (
+              <ProductVariantSelector
+                variants={product.variants}
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: mainImage ?? "",
+                  slug: product.slug,
+                  stock: product.stock,
+                }}
+              />
+            )}
+
+            {product.variants.length === 0 && product.stock > 0 && (
+              <ProductVariantSelector
+                variants={[]}
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: mainImage ?? "",
+                  slug: product.slug,
+                  stock: product.stock,
+                }}
+              />
+            )}
+          </div>
         </div>
+
+        {related.length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold mb-4">منتجات مشابهة</h2>
+            <ProductGrid products={related} />
+          </div>
+        )}
       </div>
-
-      {related.length > 0 && (
-        <div>
-          <h2 className="text-xl font-bold mb-4">منتجات مشابهة</h2>
-          <ProductGrid products={related} />
-        </div>
-      )}
-    </div>
+    </>
   );
 }

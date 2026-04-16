@@ -51,6 +51,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  alternates: {
+    languages: { "ar-EG": "/" },
+  },
 };
 
 export default function RootLayout({
