@@ -42,6 +42,7 @@ export async function createCategory(data: {
 
   revalidatePath("/admin/categories")
   revalidatePath("/shop")
+  revalidatePath("/")
   return category
 }
 
@@ -64,6 +65,7 @@ export async function updateCategory(
 
   revalidatePath("/admin/categories")
   revalidatePath("/shop")
+  revalidatePath("/")
   return category
 }
 
@@ -75,6 +77,7 @@ export async function deleteCategory(id: string) {
 
   revalidatePath("/admin/categories")
   revalidatePath("/shop")
+  revalidatePath("/")
   return { success: true }
 }
 

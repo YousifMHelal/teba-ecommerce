@@ -8,6 +8,15 @@ import { auth } from "@/lib/auth"
 import { ITEMS_PER_PAGE } from "@/lib/constants"
 import { ProductFiltersType } from "@/types"
 import slugify from "slugify"
+import { algoliasearch } from "algoliasearch"
+
+const algoliaClient = algoliasearch(
+  process.env.ALGOLIA_APP_ID!,
+  process.env.ALGOLIA_ADMIN_API_KEY!
+)
+
+const ALGOLIA_INDEX = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME || "teba_products"
+
 
 export async function getProducts(filters: ProductFiltersType = {}) {
   const {
@@ -161,31 +170,7 @@ export async function createProduct(data: {
   const session = await auth()
   if (session?.user.role !== "ADMIN") throw new Error("غير مصرح")
 
-  // Validate required fields
-  if (!data.name || typeof data.name !== "string") {
-    throw new Error("اسم المنتج مطلوب وجب أن يكون نصاً صحيحاً")
-  }
-  if (data.description && typeof data.description !== "string") {
-    throw new Error("الوصف يجب أن يكون نصاً صحيحاً")
-  }
-  if (typeof data.price !== "number" || data.price <= 0) {
-    throw new Error("السعر مطلوب وجب أن يكون رقماً موجباً")
-  }
-  if (!data.categoryId || typeof data.categoryId !== "string") {
-    throw new Error("الفئة مطلوبة")
-  }
-  if (data.images && data.images.some((img) => !img || typeof img !== "string")) {
-    throw new Error("جميع الصور يجب أن تحتوي على روابط صحيحة")
-  }
-  if (typeof data.stock !== "number" || data.stock < 0) {
-    throw new Error("المخزون يجب أن يكون رقماً موجباً أو صفر")
-  }
-
   const slug = slugify(data.name, { lower: true, strict: true })
-
-  if (!slug || typeof slug !== "string" || slug.trim().length === 0) {
-    throw new Error("فشل إنشاء معرّف فريد للمنتج من الاسم المعطى")
-  }
 
   const { variants, ...productData } = data
 
@@ -197,13 +182,17 @@ export async function createProduct(data: {
         variants: { create: variants },
       }),
     },
-    include: { variants: true },
+    include: {
+      variants: true,
+      category: true, // ✅ FIXED
+    },
   })
 
   await syncProductToAlgolia(product)
 
   revalidatePath("/admin/products")
   revalidatePath("/shop")
+  revalidatePath("/")
   return product
 }
 
@@ -224,6 +213,7 @@ export async function updateProduct(
   if (session?.user.role !== "ADMIN") throw new Error("غير مصرح")
 
   const updateData: typeof data & { slug?: string } = { ...data }
+
   if (data.name) {
     updateData.slug = slugify(data.name, { lower: true, strict: true })
   }
@@ -239,6 +229,7 @@ export async function updateProduct(
   revalidatePath("/admin/products")
   revalidatePath(`/shop/${product.slug}`)
   revalidatePath("/shop")
+  revalidatePath("/")
   return product
 }
 
@@ -252,6 +243,7 @@ export async function deleteProduct(id: string) {
 
   revalidatePath("/admin/products")
   revalidatePath("/shop")
+  revalidatePath("/")
   return { success: true }
 }
 
@@ -324,27 +316,22 @@ async function syncProductToAlgolia(product: {
   category?: { name: string; slug: string } | null
 }) {
   try {
-    const { algoliasearch } = await import("algoliasearch")
-    const client = algoliasearch(
-      process.env.ALGOLIA_APP_ID!,
-      process.env.ALGOLIA_ADMIN_API_KEY!
-    )
-    const index = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME!
-
-    await client.saveObject({
-      indexName: index,
-      body: {
-        objectID: product.id,
-        name: product.name,
-        slug: product.slug,
-        description: product.description,
-        price: product.price,
-        comparePrice: product.comparePrice,
-        image: product.images[0] ?? null,
-        stock: product.stock,
-        categoryName: product.category?.name ?? "",
-        categorySlug: product.category?.slug ?? "",
-      },
+    await algoliaClient.saveObjects({
+      indexName: ALGOLIA_INDEX,
+      objects: [
+        {
+          objectID: product.id,
+          name: product.name,
+          slug: product.slug,
+          description: product.description,
+          price: product.price,
+          comparePrice: product.comparePrice,
+          image: product.images?.[0] ?? null,
+          stock: product.stock,
+          categoryName: product.category?.name ?? "",
+          categorySlug: product.category?.slug ?? "",
+        },
+      ],
     })
   } catch (err) {
     console.error("Algolia sync failed:", err)
@@ -353,13 +340,8 @@ async function syncProductToAlgolia(product: {
 
 async function deleteProductFromAlgolia(id: string) {
   try {
-    const { algoliasearch } = await import("algoliasearch")
-    const client = algoliasearch(
-      process.env.ALGOLIA_APP_ID!,
-      process.env.ALGOLIA_ADMIN_API_KEY!
-    )
-    await client.deleteObject({
-      indexName: process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME!,
+    await algoliaClient.deleteObject({
+      indexName: ALGOLIA_INDEX,
       objectID: id,
     })
   } catch (err) {
@@ -376,11 +358,23 @@ export async function syncAllProductsToAlgolia() {
     include: { category: true },
   })
 
-  for (const product of products) {
-    await syncProductToAlgolia(product)
-  }
+  await algoliaClient.saveObjects({
+    indexName: ALGOLIA_INDEX,
+    objects: products.map((product) => ({
+      objectID: product.id,
+      name: product.name,
+      slug: product.slug,
+      description: product.description,
+      price: product.price,
+      comparePrice: product.comparePrice,
+      image: product.images?.[0] ?? null,
+      stock: product.stock,
+      categoryName: product.category?.name ?? "",
+      categorySlug: product.category?.slug ?? "",
+    })),
+  })
 
-  return { synced: products.length }
+  return { synced: products.length, products }
 }
 
 export async function getProductsAction(params?: { limit?: number }) {

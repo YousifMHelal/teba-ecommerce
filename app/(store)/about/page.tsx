@@ -55,7 +55,7 @@ const contactLinks = [
   {
     label: "البريد الإلكتروني",
     value: "tiba.offical@gmail.com",
-    href: "mailto:tiba.offical@gmail.com",
+    href: "https://mail.google.com/mail/u/0/?to=tiba.offical@gmail.com&fs=1&tf=cm",
     icon: Mail,
   },
   {
@@ -67,22 +67,22 @@ const contactLinks = [
   {
     label: "فيسبوك",
     value: "تابعنا على الصفحة",
-    href: "https://facebook.com",
+    href: "https://www.facebook.com/Tiba.official/",
     icon: FaFacebookF,
   },
   {
     label: "العنوان",
-    value: "القاهرة، مصر",
-    href: "https://maps.google.com/?q=القاهرة، مصر",
+    value: "القليوبية، مصر",
+    href: "https://www.google.com/maps/place/%D9%85%D8%A4%D8%B3%D8%B3%D8%A9+%D8%B7%D9%8A%D8%A8%D8%A9+%D9%84%D9%84%D9%85%D9%86%D8%B8%D9%81%D8%A7%D8%AA%E2%80%AD/@30.1711893,31.1992579,753m/data=!3m1!1e3!4m6!3m5!1s0x14586be0adde04bf:0xc946af076bcee001!8m2!3d30.1710594!4d31.2025517!16s%2Fg%2F11fshdmcy9?entry=ttu&g_ep=EgoyMDI2MDQxMy4wIKXMDSoASAFQAw%3D%3D",
     icon: MapPin,
   },
-] as const
+] as const;
 
 const steps = [
   "استعراض الفئات والمنتجات من المتجر",
   "اختيار المنتجات المناسبة وإضافة الكمية المطلوبة",
   "إتمام الطلب ومتابعة التجهيز والتوصيل",
-] as const
+] as const;
 
 export default function AboutPage() {
   return (
@@ -98,15 +98,16 @@ export default function AboutPage() {
               شريكك في خامات المنظفات الموثوقة
             </h1>
             <p className="max-w-2xl text-sm leading-7 text-muted-foreground sm:text-base">
-              {APP_NAME} يركز على توفير خامات ومنتجات تساعدك في الوصول إلى نتائج عملية وجودة ثابتة،
-              مع تجربة شراء بسيطة تناسب الأفراد وأصحاب الأعمال والمصانع الصغيرة.
+              مؤسسه طيبه لتجاره وتوزيع خامات المنظفات تركز على توفير خامات
+              ومنتجات تساعدك في الوصول إلى نتائج عملية وجودة ثابتة، مع تجربة
+              شراء بسيطة تناسب الأفراد وأصحاب الأعمال والمصانع الصغيرة.
             </p>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <Link
               href="/shop"
-              className={cn(buttonVariants(), "h-auto rounded-2xl px-5 py-3") }>
+              className={cn(buttonVariants(), "h-auto rounded-2xl px-5 py-3")}>
               تصفح المتجر
             </Link>
             <Link
@@ -124,7 +125,7 @@ export default function AboutPage() {
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => {
-          const Icon = stat.icon
+          const Icon = stat.icon;
 
           return (
             <Card key={stat.label} className="border-border/70 bg-card/90">
@@ -143,7 +144,7 @@ export default function AboutPage() {
                 نركز على التجربة العملية والسريعة التي تساعدك على الشراء بثقة.
               </CardContent>
             </Card>
-          )
+          );
         })}
       </section>
 
@@ -152,17 +153,19 @@ export default function AboutPage() {
           <CardHeader>
             <CardTitle className="text-xl">رؤيتنا</CardTitle>
             <CardDescription>
-              أن تكون تجربة شراء خامات المنظفات واضحة، سريعة، وموثوقة من أول زيارة حتى استلام الطلب.
+              أن تكون تجربة شراء خامات المنظفات واضحة، سريعة، وموثوقة من أول
+              زيارة حتى استلام الطلب.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 text-sm leading-7 text-muted-foreground">
             <p>
-              نؤمن أن نجاح العميل يبدأ من توفر المنتج المناسب بالمواصفة الصحيحة، لذلك نهتم
-              بتقديم تشكيلة عملية من الخامات الأساسية والمنتجات الداعمة التي يحتاجها السوق.
+              نؤمن أن نجاح العميل يبدأ من توفر المنتج المناسب بالمواصفة الصحيحة،
+              لذلك نهتم بتقديم تشكيلة عملية من الخامات الأساسية والمنتجات
+              الداعمة التي يحتاجها السوق.
             </p>
             <p>
-              هدفنا ليس فقط عرض المنتجات، بل تبسيط الوصول إليها، مع إبراز الفئات، وتسهيل المقارنة،
-              ومتابعة الطلب بطريقة مريحة وواضحة.
+              هدفنا ليس فقط عرض المنتجات، بل تبسيط الوصول إليها، مع إبراز
+              الفئات، وتسهيل المقارنة، ومتابعة الطلب بطريقة مريحة وواضحة.
             </p>
           </CardContent>
         </Card>
@@ -176,11 +179,15 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {steps.map((step, index) => (
-              <div key={step} className="flex items-start gap-3 rounded-2xl border border-border/60 p-3">
+              <div
+                key={step}
+                className="flex items-start gap-3 rounded-2xl border border-border/60 p-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
                   {index + 1}
                 </div>
-                <p className="pt-1 text-sm leading-6 text-muted-foreground">{step}</p>
+                <p className="pt-1 text-sm leading-6 text-muted-foreground">
+                  {step}
+                </p>
               </div>
             ))}
           </CardContent>
@@ -213,7 +220,7 @@ export default function AboutPage() {
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
           {contactLinks.map((contact) => {
-            const Icon = contact.icon
+            const Icon = contact.icon;
 
             return (
               <Link
@@ -225,10 +232,14 @@ export default function AboutPage() {
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary/15">
                   <Icon className="h-5 w-5" />
                 </div>
-                <p className="text-sm font-medium text-foreground">{contact.label}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{contact.value}</p>
+                <p className="text-sm font-medium text-foreground">
+                  {contact.label}
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {contact.value}
+                </p>
               </Link>
-            )
+            );
           })}
         </div>
       </section>
@@ -242,17 +253,22 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href="/shop" className={cn(buttonVariants(), "h-auto rounded-2xl px-5 py-3")}>
+            <Link
+              href="/shop"
+              className={cn(buttonVariants(), "h-auto rounded-2xl px-5 py-3")}>
               ابدأ التسوق
             </Link>
             <Link
               href="/categories"
-              className={cn(buttonVariants({ variant: "outline" }), "h-auto rounded-2xl px-5 py-3") }>
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "h-auto rounded-2xl px-5 py-3",
+              )}>
               الأقسام
             </Link>
           </div>
         </div>
       </section>
     </div>
-  )
+  );
 }

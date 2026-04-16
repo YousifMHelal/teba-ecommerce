@@ -61,7 +61,7 @@ export const APP_NAME = "طيبة"
 export const APP_DESCRIPTION = "متجر طيبة الإلكتروني — تسوق بسهولة وأمان"
 export const APP_URL = process.env.NEXT_PUBLIC_APP_URL!
 
-export const ITEMS_PER_PAGE = 12
+export const ITEMS_PER_PAGE = 24
 export const SHIPPING_THRESHOLD = 20000
 export const SHIPPING_COST = 100
 
@@ -104,7 +104,7 @@ export const PAYMENT_METHODS = [
     icon: "💳",
     requiresReference: true,
     instructions:
-      "حوّل المبلغ إلى حساب Instapay: 01XXXXXXXXXX ثم أدخل رقم العملية أدناه",
+      "حوّل المبلغ إلى حساب Instapay: 01110292946 ثم أدخل رقم العملية أدناه",
   },
   {
     id: "VODAFONE_CASH",
@@ -113,7 +113,7 @@ export const PAYMENT_METHODS = [
     icon: "📱",
     requiresReference: true,
     instructions:
-      "حوّل المبلغ إلى محفظة Vodafone Cash: 01XXXXXXXXXX ثم أدخل رقم العملية أدناه",
+      "حوّل المبلغ إلى محفظة Vodafone Cash: 01050991860 ثم أدخل رقم العملية أدناه",
   },
   {
     id: "PAY_ON_DELIVERY",

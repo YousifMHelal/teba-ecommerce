@@ -16,18 +16,18 @@ const quickLinks = [
   { href: "/about", label: "من نحن" },
 ] as const;
 
-const categories = ["أحماض", "عطور", "مكثفات", "مبيضات", "عبوات"] as const;
+const categories = ["خامات", "عطور", "منظفات", "سوائل", "شكاير"] as const;
 
 const contactItems = [
   { icon: Phone, text: "01110292946" },
   { icon: Mail, text: "tiba.offical@gmail.com" },
-  { icon: MapPin, text: "القاهرة، مصر" },
+  { icon: MapPin, text: "القليوبية، مصر" },
 ] as const;
 
 const socialLinks = [
   {
     name: "Facebook",
-    href: "https://facebook.com",
+    href: "https://www.facebook.com/Tiba.official/",
     label: "فيسبوك",
     className: "text-[#1877F2] hover:opacity-80",
     Icon: FaFacebookF,
@@ -41,7 +41,7 @@ const socialLinks = [
   },
   {
     name: "Gmail",
-    href: "mailto:tiba.offical@gmail.com",
+    href: "https://mail.google.com/mail/u/0/?to=tiba.offical@gmail.com&fs=1&tf=cm",
     label: "جيميل",
     className: "text-[#EA4335] hover:opacity-80",
     Icon: MdEmail,
@@ -71,7 +71,7 @@ export function Footer() {
               />
             </Link>
             <p className="text-sm text-muted-foreground">
-              لتجارة وتوزيع خامات المنظفات
+              مؤسسه طيبه لتجاره وتوزيع خامات المنظفات
             </p>
           </div>
           <p className="text-sm leading-relaxed text-muted-foreground">
@@ -80,13 +80,12 @@ export function Footer() {
           <div className="flex items-center gap-2">
             {socialLinks.map((item) => {
               const Icon = item.Icon;
-
+              const isMailto = item.href.startsWith("mailto:");
               return (
                 <a
                   key={item.name}
                   href={item.href}
-                  target="_blank"
-                  rel="noreferrer"
+                  {...(!isMailto && { target: "_blank", rel: "noreferrer" })}
                   aria-label={item.label}
                   className={`flex h-8 w-8 items-center justify-center rounded-full border border-border/60 transition-all hover:border-current ${item.className}`}>
                   <Icon className="h-4 w-4" />
