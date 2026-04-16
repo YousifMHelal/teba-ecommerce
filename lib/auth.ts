@@ -75,7 +75,7 @@ export const authConfig: NextAuthConfig = {
     // On sign-in, user object is available — persist role and id into token
       if (user) {
         token.role = user.role;
-        token.id = user.id;
+        token.id = user.id ?? "";
       }
       return token;
     },

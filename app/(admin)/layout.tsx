@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { AdminTopbar } from "../../components/layout/AdminTopbar";
 import { AdminSidebar } from "@/components/layout/AdminSidebar";
+import { AdminMobileHeader } from "@/components/admin/AdminMobileHeader";
 
 export default async function AdminLayout({
   children,
@@ -24,9 +25,12 @@ export default async function AdminLayout({
   return (
     <div className="flex min-h-screen bg-muted/30">
       <AdminSidebar />
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+        <AdminMobileHeader user={session.user} />
         <AdminTopbar user={session.user} />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+          {children}
+        </main>
       </div>
     </div>
   );

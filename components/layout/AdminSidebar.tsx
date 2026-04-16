@@ -25,7 +25,7 @@ export function AdminSidebar() {
     exact ? pathname === href : pathname.startsWith(href);
 
   return (
-    <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-e bg-background overflow-y-auto">
+    <aside className="sticky top-0 hidden lg:flex h-screen w-64 shrink-0 flex-col border-e bg-background overflow-y-auto">
       <div className="flex h-16 items-center border-b px-5 shrink-0">
         <Link href="/admin" className="flex items-center gap-2">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">

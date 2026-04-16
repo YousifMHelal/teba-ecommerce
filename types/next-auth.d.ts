@@ -1,4 +1,5 @@
-import { DefaultSession, DefaultJWT } from "next-auth"
+import { DefaultSession } from "next-auth"
+import { AdapterUser as BaseAdapterUser } from "@auth/core/adapters"
 
 declare module "next-auth" {
   interface Session {
@@ -10,10 +11,15 @@ declare module "next-auth" {
 }
 
 declare module "next-auth/jwt" {
-  interface JWT extends DefaultJWT {
+  interface JWT {
     id: string
     role: string
-    email?: string | null
-    picture?: string | null
+  }
+}
+
+// Augment the adapter user to include role
+declare module "@auth/core/adapters" {
+  interface AdapterUser {
+    role: string
   }
 }
