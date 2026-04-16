@@ -71,42 +71,21 @@ export const authConfig: NextAuthConfig = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async jwt({ token, user }) {
+    // On sign-in, user object is available — persist role and id into token
       if (user) {
-        token.id = user.id
-        token.role = user.role === "ADMIN" ? "ADMIN" : "USER"
-        token.name = user.name
-        token.email = user.email
-        token.picture = user.image
+        token.role = user.role;
+        token.id = user.id;
       }
-
-      // Keep JWT in sync with `useSession().update(...)` from the client.
-      if (trigger === "update" && session) {
-        if (typeof session.name === "string") token.name = session.name
-      }
-
-      return token
+      return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        if (typeof token.id === "string") {
-          session.user.id = token.id
-        }
-        if (token.role === "ADMIN" || token.role === "USER") {
-          session.user.role = token.role
-        }
-        if (typeof token.name === "string") {
-          session.user.name = token.name
-        }
-        if (typeof token.email === "string") {
-          session.user.email = token.email
-        }
-        if (typeof token.picture === "string") {
-          session.user.image = token.picture
-        }
+      // Forward token fields into the session object
+      if (token && session.user) {
+        session.user.role = token.role as string;
+        session.user.id = token.id as string;
       }
-
-      return session
+      return session;
     },
   },
 }

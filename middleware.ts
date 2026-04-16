@@ -3,7 +3,14 @@ import { NextResponse, NextRequest } from "next/server"
 
 export async function middleware(req: NextRequest) {
   const { nextUrl } = req;
-  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const token = await getToken({
+    req,
+    secret: process.env.AUTH_SECRET,
+    cookieName:
+      process.env.NODE_ENV === "production"
+        ? "__Secure-authjs.session-token"
+        : "authjs.session-token",
+  });
 
   const isLoggedIn = !!token;
   const isAdmin = token?.role === "ADMIN";
@@ -40,7 +47,9 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/:path*",
+    "/profile/:path*",
+    "/orders/:path*",
+    "/addresses/:path*",
     "/checkout/:path*",
     "/admin/:path*",
     "/login",
